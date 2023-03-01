@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="martel_sans_marvel">
+        <item name="fontFamily">@font/martel_sans</item>
+        <item name="android:textSize">34sp</item>
+    </style>
+
+    <style name="home_mini_cardview_design">
+        <item name="cardCornerRadius">100dp</item>
+        <item name="android:layout_height">80dp</item>
+        <item name="android:layout_width">80dp</item>
+    </style>
+</resources>
