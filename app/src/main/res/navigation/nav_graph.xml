@@ -9,10 +9,33 @@
         android:id="@+id/homeFragment"
         android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_detailCharacterFragment"
+            app:destination="@id/detailCharacterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/libraryFragment"
+        android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.LibraryFragment"
+        android:label="fragment_library"
+        tools:layout="@layout/fragment_library" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/detailCharacterFragment"
+        android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.DetailCharacterFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail_character" >
+        <argument
+            android:name="ID"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -12,6 +12,14 @@ class Repository(private val MarvelApi: MarvelApi) {
     val character: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>>
         get() = _character
 
+    private var _singleCharacter = MutableLiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>()
+    val singleCharacter: LiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>
+        get() = _singleCharacter
+
+    private var _searchedCharacter = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>>()
+    val searchedCharacter: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>>
+        get() = _searchedCharacter
+
     private var _comicAdverts = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>(mutableListOf())
     val comicAdverts: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>
         get() = _comicAdverts
@@ -70,6 +78,28 @@ class Repository(private val MarvelApi: MarvelApi) {
 
         _homeSeriesList.value?.addAll(serieImport.data.results.shuffled())
         _homeSeriesList.value = _homeSeriesList.value
+    }
 
+    suspend fun loadSingleCharacter(id:Int?, nameStartWith: String?){
+        val singleCharacterImport = MarvelApi.retrofitService.getSingleCharacter(
+            apikey = Constants.API_KEY,
+            ts = Constants.timestamp,
+            hash = Constants.hash(),
+            id = id,
+            nameStartWith = nameStartWith
+        )
+        _singleCharacter.value = singleCharacterImport.data.results.first()
+        _singleCharacter.value = _singleCharacter.value
+    }
+
+    suspend fun loadSearchedCharacter(nameStartWith: String?) {
+        val searchedCharImport = MarvelApi.retrofitService.searchCharacter(
+            apikey = Constants.API_KEY,
+            ts = Constants.timestamp,
+            hash = Constants.hash(),
+            nameStartWith = nameStartWith
+        )
+
+        _searchedCharacter.value?.addAll(searchedCharImport.data.results)
     }
 }

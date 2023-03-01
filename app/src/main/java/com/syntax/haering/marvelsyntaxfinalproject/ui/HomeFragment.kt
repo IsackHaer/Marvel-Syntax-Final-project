@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
+import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeAdvertComicAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeCharacterAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeSeriesListAdapter
@@ -37,6 +39,7 @@ class HomeFragment: Fragment() {
         binding.homeBottomRv.adapter = homeAdapter
         binding.homeAdvertComicRv.adapter = advertAdapter
         binding.homeSeriesRv.adapter = homeSeriesAdapter
+        snapHelper.attachToRecyclerView(binding.homeAdvertComicRv)
 
         viewModel.character.observe(viewLifecycleOwner){
             lifecycleScope.launch {
@@ -54,7 +57,10 @@ class HomeFragment: Fragment() {
             }
         }
 
-        snapHelper.attachToRecyclerView(binding.homeAdvertComicRv)
+        binding.homeIronmanCv.setOnClickListener { navigateToCharacter(1009368) }
+//        binding.homeSpidermanCv.setOnClickListener { navigateToCharacter() }
+
+        binding
 
         return view
     }
@@ -62,5 +68,9 @@ class HomeFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun navigateToCharacter(id: Int){
+        Navigation.findNavController(binding.root).navigate(HomeFragmentDirections.actionHomeFragmentToDetailCharacterFragment(id))
     }
 }

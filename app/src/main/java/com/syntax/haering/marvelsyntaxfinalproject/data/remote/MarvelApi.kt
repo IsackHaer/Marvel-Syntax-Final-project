@@ -50,6 +50,23 @@ interface MarvelApiService {
         @Query("limit") limit: Int,
         @Query("offset") offset: Int
     ): SerieDTO
+
+    @GET("/v1/public/characters")
+    suspend fun getSingleCharacter(
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash(),
+        @Query("id") id: Int?,
+        @Query("nameStartsWith") nameStartWith: String?
+    ) : CharacterDTO
+
+    @GET("/v1/public/characters")
+    suspend fun searchCharacter(
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash(),
+        @Query("nameStartsWith") nameStartWith: String?
+    ) : CharacterDTO
 }
 
 object MarvelApi {
