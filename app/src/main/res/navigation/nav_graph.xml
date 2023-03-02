@@ -18,7 +18,11 @@
         android:id="@+id/searchFragment"
         android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_detailCharacterFragment"
+            app:destination="@id/detailCharacterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/libraryFragment"
         android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.LibraryFragment"

@@ -58,9 +58,22 @@ class HomeFragment: Fragment() {
         }
 
         binding.homeIronmanCv.setOnClickListener { navigateToCharacter(1009368) }
-//        binding.homeSpidermanCv.setOnClickListener { navigateToCharacter() }
+        binding.homeSpidermanCv.setOnClickListener { navigateToCharacter(1009610) }
+        binding.homeThorCv.setOnClickListener { navigateToCharacter(1009664) }
+        binding.homeCapAmericaCv.setOnClickListener { navigateToCharacter(1009220) }
+        binding.homeBlackwidowCv.setOnClickListener { navigateToCharacter(1017109) }
+        binding.homeBlackpantherCv.setOnClickListener { navigateToCharacter(1009187) }
+        binding.homeAntmanCv.setOnClickListener { navigateToCharacter(1010802) }
+        binding.homeHulkCv.setOnClickListener { navigateToCharacter(1009351) }
 
-        binding
+        binding.homeDrDoomCv.setOnClickListener { navigateToCharacter(1010324) }
+        binding.homeVenomCv.setOnClickListener { navigateToCharacter(1009663) }
+        binding.homeGalacticusCv.setOnClickListener { navigateToCharacter(1009312) }
+        binding.homeLokiCv.setOnClickListener { navigateToCharacter(1009407) }
+        binding.homeMagnetoCv.setOnClickListener { navigateToCharacter(1009417) }
+        binding.homeUltronCv.setOnClickListener { navigateToCharacter(1009685) }
+        binding.homeBullseyeCv.setOnClickListener { navigateToCharacter(1009212) }
+        binding.homeThanosCv.setOnClickListener { navigateToCharacter(1009652) }
 
         return view
     }

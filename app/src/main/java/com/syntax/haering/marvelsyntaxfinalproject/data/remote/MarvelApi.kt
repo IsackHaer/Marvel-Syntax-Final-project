@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Url
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.sql.Timestamp
@@ -57,16 +58,40 @@ interface MarvelApiService {
         @Query("apikey") apikey: String = Constants.API_KEY,
         @Query("hash") hash: String = Constants.hash(),
         @Query("id") id: Int?,
-        @Query("nameStartsWith") nameStartWith: String?
     ) : CharacterDTO
 
     @GET("/v1/public/characters")
     suspend fun searchCharacter(
+        @Query("limit") limit: Int,
+        @Query("nameStartsWith") nameStartWith: String,
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash()
+    ) : CharacterDTO
+
+    @GET("/v1/public/series")
+    suspend fun searchedSeries(
         @Query("ts") ts: String = Constants.timestamp,
         @Query("apikey") apikey: String = Constants.API_KEY,
         @Query("hash") hash: String = Constants.hash(),
-        @Query("nameStartsWith") nameStartWith: String?
-    ) : CharacterDTO
+        @Query("limit") limit: Int,
+        @Query("titleStartsWith") titleStartWith: String
+    ) : SerieDTO
+
+    @GET
+    suspend fun getSeriesForCharacter(
+        @Url url: String,
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash(),
+    ) : SerieDTO
+    @GET
+    suspend fun getComicsForCharacter(
+        @Url url: String,
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash(),
+    ) : ComicDTO
 }
 
 object MarvelApi {

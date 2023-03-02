@@ -2,6 +2,7 @@ package com.syntax.haering.marvelsyntaxfinalproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,12 +19,18 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = findViewById(R.id.activityMain_bottomNavigation)
         navView.setupWithNavController(navController)
 
-        /*navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.searchFragment){
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            if (destination.id == R.id.detailCharacterFragment){
                 navView.visibility = View.GONE
             } else {
                 navView.visibility = View.VISIBLE
             }
-        }*/
+        }
     }
 }
+
+
+
+
+
+Work on DetailSeries and DetailComics screens next and setup the directions aswell as setOnCLickListeners

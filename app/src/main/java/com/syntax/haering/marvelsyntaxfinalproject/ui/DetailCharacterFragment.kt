@@ -6,11 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
 import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailComicsAdapter
+import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailSeriesAdapter
+import com.syntax.haering.marvelsyntaxfinalproject.adapter.SearchResultSerieAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailCharacterBinding
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -31,6 +36,9 @@ class DetailCharacterFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
 
+    val seriesAdapter = DetailSeriesAdapter()
+    val comicsAdapter = DetailComicsAdapter()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -47,16 +55,11 @@ class DetailCharacterFragment : Fragment() {
         _binding = FragmentDetailCharacterBinding.inflate(inflater, container, false)
         val view = binding.root
         val getID = requireArguments().getInt("ID")
-        val singleCharacter = viewModel.loadSingleCharacter(getID, null)
 
-        viewModel.singleCharacter.observe(viewLifecycleOwner){
-            val https = it.thumbnail.path.replace("http", "https")
-            binding.detailCharImageIv.load("$https/landscape_incredible.${it.thumbnail.extension}"){
-                placeholder(R.drawable.ic_launcher_background)
-                error(R.drawable.ic_launcher_foreground)
-            }
-            binding.detailCharTitleTv.text = it.name
-            binding.detailCharDescriptionTv.text = it.description
+        viewModel.loadSingleCharacter(getID)
+
+        viewModel.singleCharacter.observe(viewLifecycleOwner) { character ->
+            setUpUi(character)
         }
 
         binding.detailCharBackBtn.setOnClickListener {
@@ -66,6 +69,32 @@ class DetailCharacterFragment : Fragment() {
         return view
     }
 
+    fun setUpUi(
+        character: com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result
+    ) {
+        val https = character.thumbnail.path.replace("http", "https")
+
+        viewModel.getCharacterSeriesList(character.series.collectionURI, character.comics.collectionURI)
+
+        binding.detailCharImageIv.load("$https/landscape_incredible.${character.thumbnail.extension}") {
+            placeholder(R.drawable.ic_launcher_background)
+            error(R.drawable.ic_launcher_foreground)
+        }
+
+        binding.detailCharTitleTv.text = character.name
+        binding.detailCharDescriptionTv.text = character.description
+
+        binding.detailSeriesRv.adapter = seriesAdapter
+        binding.detailComicsRv.adapter = comicsAdapter
+
+        viewModel.detailSeriesForCharacter.observe(viewLifecycleOwner){
+            lifecycleScope.launch { seriesAdapter.submitSerieList(it) }
+        }
+
+        viewModel.detailComicsForCharacter.observe(viewLifecycleOwner){
+            lifecycleScope.launch { comicsAdapter.submitComicsList(it) }
+        }
+    }
 
 
     override fun onDestroyView() {

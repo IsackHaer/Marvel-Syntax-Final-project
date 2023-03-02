@@ -33,33 +33,33 @@
         android:layout_marginHorizontal="16dp"
         android:gravity="start"
         android:maxHeight="30dp"
-        android:text="Title or Name"
         android:textAppearance="@style/martel_sans_marvel"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/search_image_cv"
-        app:layout_constraintTop_toTopOf="@+id/search_image_cv" />
+        app:layout_constraintTop_toTopOf="@+id/search_image_cv"
+        tools:text="Title or Name" />
 
     <TextView
         android:id="@+id/search_creator_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="creator"
         android:textAppearance="@style/martel_sans_marvel"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/search_title_tv"
-        app:layout_constraintTop_toBottomOf="@+id/search_title_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/search_title_tv"
+        tools:text="creator" />
 
     <TextView
         android:id="@+id/search_pagecount_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="page count: 100"
         android:textAppearance="@style/martel_sans_marvel"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/search_creator_tv"
-        app:layout_constraintTop_toBottomOf="@+id/search_creator_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/search_creator_tv"
+        tools:text="page count: 100" />
 
     <View
         android:id="@+id/view"

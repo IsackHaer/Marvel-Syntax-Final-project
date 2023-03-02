@@ -1,29 +1,38 @@
 package com.syntax.haering.marvelsyntaxfinalproject
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.syntax.haering.marvelsyntaxfinalproject.data.Repository
 import com.syntax.haering.marvelsyntaxfinalproject.data.remote.MarvelApi
 import kotlinx.coroutines.launch
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel : ViewModel() {
 
     val repository = Repository(MarvelApi)
-    val character = repository.character
+    val character = repository.characters
     val advertComics = repository.comicAdverts
     val homeSeriesList = repository.homeSeriesList
 
     val singleCharacter = repository.singleCharacter
-    val searchedCharacter = repository.searchedCharacter
+    val searchedCharacter = repository.searchedTermCharacter
+    val searchedSerie = repository.searchedTermSerie
+
+    val detailSeriesForCharacter = repository.detailSeriesForCharacter
+    val detailComicsForCharacter = repository.detailComicsForCharacter
+
+
+    private var _searchCategoryBtnState = MutableLiveData<Boolean>(true)
+    val searchCategoryBtnState: LiveData<Boolean> get() = _searchCategoryBtnState
 
 
     init {
         loadHomeScreenWithData()
-        loadSingleCharacter(null, null)
-        searchCharacter(null)
     }
 
-    fun loadHomeScreenWithData(){
+    fun loadHomeScreenWithData() {
         viewModelScope.launch {
             repository.loadCharacters()
             repository.loadAdvertComicList()
@@ -31,15 +40,30 @@ class HomeViewModel: ViewModel() {
         }
     }
 
-    fun loadSingleCharacter(id: Int?, nameStartWith: String?){
+    fun loadSingleCharacter(id: Int?) {
         viewModelScope.launch {
-            repository.loadSingleCharacter(id, nameStartWith)
+            repository.loadSingleCharacter(id)
         }
     }
 
-    fun searchCharacter(namesStartWith: String?){
+    fun searchedTerm(namesStartWith: String, titleStartsWith: String) {
         viewModelScope.launch {
-            repository.loadSearchedCharacter(namesStartWith)
+            repository.loadSearchedTerm(namesStartWith, titleStartsWith)
         }
+    }
+
+    fun changeSearchCategory(isOnChar: Boolean) {
+        if (isOnChar)
+            _searchCategoryBtnState.value = true
+        if (!isOnChar)
+            _searchCategoryBtnState.value = false
+        _searchCategoryBtnState.value = _searchCategoryBtnState.value
+    }
+
+    fun getCharacterSeriesList(SeriesCollectionURI: String, ComicsCollectionURI: String){
+        viewModelScope.launch {
+            repository.loadCharacterSeriesList(SeriesCollectionURI, ComicsCollectionURI)
+        }
+        Log.d("ViewModel", SeriesCollectionURI)
     }
 }
