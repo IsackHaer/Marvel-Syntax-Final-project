@@ -1,6 +1,5 @@
 package com.syntax.haering.marvelsyntaxfinalproject
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,16 +11,20 @@ import kotlinx.coroutines.launch
 class HomeViewModel : ViewModel() {
 
     val repository = Repository(MarvelApi)
+
     val character = repository.characters
     val advertComics = repository.comicAdverts
     val homeSeriesList = repository.homeSeriesList
 
     val singleCharacter = repository.singleCharacter
+    val singleSerie = repository.singleSerie
+    val singleComic = repository.singleComic
+
     val searchedCharacter = repository.searchedTermCharacter
     val searchedSerie = repository.searchedTermSerie
 
-    val detailSeriesForCharacter = repository.detailSeriesForCharacter
-    val detailComicsForCharacter = repository.detailComicsForCharacter
+    val detailSeriesCollection = repository.detailSeriesCollection
+    val detailComicsCollection = repository.detailComicsCollection
 
 
     private var _searchCategoryBtnState = MutableLiveData<Boolean>(true)
@@ -40,9 +43,21 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    fun loadSingleCharacter(id: Int?) {
+    fun loadSingleCharacter(id: Int) {
         viewModelScope.launch {
             repository.loadSingleCharacter(id)
+        }
+    }
+
+    fun loadSingleSerie(id: Int){
+        viewModelScope.launch {
+            repository.loadSingleSerie(id)
+        }
+    }
+
+    fun loadSingleComic(id: Int) {
+        viewModelScope.launch {
+            repository.loadSingleComic(id)
         }
     }
 
@@ -60,10 +75,15 @@ class HomeViewModel : ViewModel() {
         _searchCategoryBtnState.value = _searchCategoryBtnState.value
     }
 
-    fun getCharacterSeriesList(SeriesCollectionURI: String, ComicsCollectionURI: String){
+    fun loadSerieCollection(SeriesCollectionURI: String){
         viewModelScope.launch {
-            repository.loadCharacterSeriesList(SeriesCollectionURI, ComicsCollectionURI)
+            repository.loadSeriesCollection(SeriesCollectionURI)
         }
-        Log.d("ViewModel", SeriesCollectionURI)
+    }
+
+    fun loadComicCollection(ComicsCollectionURI: String){
+        viewModelScope.launch {
+            repository.loadComicsCollection(ComicsCollectionURI)
+        }
     }
 }

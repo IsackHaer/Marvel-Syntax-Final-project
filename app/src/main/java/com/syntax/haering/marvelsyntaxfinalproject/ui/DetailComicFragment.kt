@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.LibraryCharacterAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.LibrarySeriesAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentLibraryBinding
+import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailComicBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,15 +19,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [LibraryFragment.newInstance] factory method to
+ * Use the [DetailComicFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LibraryFragment : Fragment() {
+class DetailComicFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private var _binding: FragmentLibraryBinding? = null
+    private var _binding: FragmentDetailComicBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
 
@@ -43,18 +44,36 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailComicBinding.inflate(inflater, container, false)
         val view = binding.root
-        val characterAdapter = LibraryCharacterAdapter()
-        val seriesAdapter = LibrarySeriesAdapter()
+        val getID = requireArguments().getInt("ComicID")
+        viewModel.loadSingleComic(getID)
 
-        binding.libraryCharactersRv.adapter = characterAdapter
-        binding.librarySeriesRv.adapter = seriesAdapter
 
-        //TODO code goes here
+        viewModel.singleComic.observe(viewLifecycleOwner){
+            setUpUI(it)
+        }
 
         return view
     }
+
+    fun setUpUI(
+        comic: com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result
+    ){
+        val https = comic.thumbnail.path.replace("http", "https")
+
+        binding.detailComicImageIv.load("$https/portrait_uncanny.${comic.thumbnail.extension}") {
+            placeholder(R.drawable.ic_launcher_background)
+            error(R.drawable.ic_launcher_foreground)
+        }
+        binding.detailComicTitleTv.text = comic.title
+        binding.detailComicDescriptionTv.text = comic.description
+
+        binding.detailComicBackBtn.setOnClickListener {
+            Navigation.findNavController(binding.root).navigateUp()
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -67,12 +86,12 @@ class LibraryFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment LibraryFragment.
+         * @return A new instance of fragment DetailComicFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            LibraryFragment().apply {
+            DetailComicFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

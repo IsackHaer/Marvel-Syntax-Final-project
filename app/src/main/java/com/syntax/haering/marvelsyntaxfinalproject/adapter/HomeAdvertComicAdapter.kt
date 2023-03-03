@@ -5,10 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.ui.HomeFragmentDirections
 
 class HomeAdvertComicAdapter: RecyclerView.Adapter<HomeAdvertComicAdapter.ItemViewHolder>() {
 
@@ -44,5 +46,9 @@ class HomeAdvertComicAdapter: RecyclerView.Adapter<HomeAdvertComicAdapter.ItemVi
             error(R.drawable.ic_launcher_foreground)
         }
         holder.comicAdvertTitle.text = comic.title
+
+        holder.comicAdvertImage.setOnClickListener {
+            Navigation.findNavController(holder.itemView).navigate(HomeFragmentDirections.actionHomeFragmentToDetailComicFragment(comic.id))
+        }
     }
 }

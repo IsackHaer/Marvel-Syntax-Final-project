@@ -54,11 +54,27 @@ interface MarvelApiService {
 
     @GET("/v1/public/characters")
     suspend fun getSingleCharacter(
+        @Query("id") id: Int,
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash()
+    ) : CharacterDTO
+
+    @GET("/v1/public/series")
+    suspend fun getSingleSerie(
         @Query("ts") ts: String = Constants.timestamp,
         @Query("apikey") apikey: String = Constants.API_KEY,
         @Query("hash") hash: String = Constants.hash(),
-        @Query("id") id: Int?,
-    ) : CharacterDTO
+        @Query("id") id: Int,
+    ) :SerieDTO
+
+    @GET("/v1/public/comics")
+    suspend fun getSingleComic(
+        @Query("ts") ts: String = Constants.timestamp,
+        @Query("apikey") apikey: String = Constants.API_KEY,
+        @Query("hash") hash: String = Constants.hash(),
+        @Query("id") id: Int,
+    ) : ComicDTO
 
     @GET("/v1/public/characters")
     suspend fun searchCharacter(
@@ -104,7 +120,6 @@ class Constants {
         val timestamp = Timestamp(System.currentTimeMillis()).time.toString()
         const val API_KEY = BuildConfig.API_KEY
         const val PRIVATE_KEY = BuildConfig.PRIVATE_KEY
-        const val limit = "20"
         fun hash(): String {
             val input = "$timestamp$PRIVATE_KEY$API_KEY"
             val md = MessageDigest.getInstance("MD5")

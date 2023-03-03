@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
+import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.LibraryCharacterAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.LibrarySeriesAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentLibraryBinding
+import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailSeriesComicsAdapter
+import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailSerieBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,17 +20,18 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [LibraryFragment.newInstance] factory method to
+ * Use the [DetailSerieFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LibraryFragment : Fragment() {
+class DetailSerieFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private var _binding: FragmentLibraryBinding? = null
+    private var _binding: FragmentDetailSerieBinding? = null
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
+    private val comicAdapter = DetailSeriesComicsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,23 +46,49 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
+        _binding = FragmentDetailSerieBinding.inflate(inflater, container, false)
         val view = binding.root
-        val characterAdapter = LibraryCharacterAdapter()
-        val seriesAdapter = LibrarySeriesAdapter()
+        val getID = requireArguments().getInt("SerieID")
+        viewModel.loadSingleSerie(getID)
 
-        binding.libraryCharactersRv.adapter = characterAdapter
-        binding.librarySeriesRv.adapter = seriesAdapter
-
-        //TODO code goes here
+        viewModel.singleSerie.observe(viewLifecycleOwner) { serie ->
+            setUpUI(serie)
+        }
 
         return view
+    }
+
+    fun setUpUI(
+        serie: com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result
+    ) {
+        val https = serie.thumbnail.path.replace("http", "https")
+
+        viewModel.loadComicCollection(serie.comics.collectionURI)
+
+        binding.detailSerieImageIv.load("$https/portrait_uncanny.${serie.thumbnail.extension}") {
+            placeholder(R.drawable.ic_launcher_background)
+            error(R.drawable.ic_launcher_foreground)
+        }
+
+        binding.detailSeriesTitleTv.text = serie.title
+        binding.detailSeriesDescriptionTv.text = serie.description
+
+        binding.detailSeriesComicCollectionRv.adapter = comicAdapter
+
+        binding.detailSerieBackBtn.setOnClickListener {
+            Navigation.findNavController(binding.root).navigateUp()
+        }
+
+        viewModel.detailComicsCollection.observe(viewLifecycleOwner){
+            comicAdapter.submitComicsList(it)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -67,12 +96,12 @@ class LibraryFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment LibraryFragment.
+         * @return A new instance of fragment DetailSerieFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            LibraryFragment().apply {
+            DetailSerieFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -6,10 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.LibraryCharacterAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.LibrarySeriesAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentLibraryBinding
+import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentRegisterBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -18,16 +18,16 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [LibraryFragment.newInstance] factory method to
+ * Use the [RegisterFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class LibraryFragment : Fragment() {
+class RegisterFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
-    private var _binding: FragmentLibraryBinding? = null
-    private val binding get() = _binding!!
+    private var _binding: FragmentRegisterBinding? = null
+    private val binding get() =  _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,15 +43,19 @@ class LibraryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         val view = binding.root
-        val characterAdapter = LibraryCharacterAdapter()
-        val seriesAdapter = LibrarySeriesAdapter()
 
-        binding.libraryCharactersRv.adapter = characterAdapter
-        binding.librarySeriesRv.adapter = seriesAdapter
 
-        //TODO code goes here
+        // TODO: code goes here
+
+        binding.registerBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment)
+        }
+
+        binding.registerSignInTv.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_signInFragment)
+        }
 
         return view
     }
@@ -67,12 +71,12 @@ class LibraryFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment LibraryFragment.
+         * @return A new instance of fragment RegisterFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            LibraryFragment().apply {
+            RegisterFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

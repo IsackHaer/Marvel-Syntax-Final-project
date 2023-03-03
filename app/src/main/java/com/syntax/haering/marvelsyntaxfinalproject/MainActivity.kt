@@ -12,15 +12,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        val apiKey = BuildConfig.API_KEY
         //Bottom navigation section
         val navController = this.findNavController(R.id.fragmentContainerView)
         val navView: BottomNavigationView = findViewById(R.id.activityMain_bottomNavigation)
         navView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            if (destination.id == R.id.detailCharacterFragment){
+            if (
+                destination.id == R.id.detailCharacterFragment ||
+                    destination.id == R.id.detailSerieFragment ||
+                    destination.id == R.id.detailComicFragment){
                 navView.visibility = View.GONE
             } else {
                 navView.visibility = View.VISIBLE
@@ -28,9 +29,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-
-
-
-
-Work on DetailSeries and DetailComics screens next and setup the directions aswell as setOnCLickListeners

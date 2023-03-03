@@ -1,18 +1,17 @@
 package com.syntax.haering.marvelsyntaxfinalproject.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.ui.SearchFragmentDirections
 
 class SearchResultSerieAdapter: RecyclerView.Adapter<SearchResultSerieAdapter.ItemViewHolder>() {
 
@@ -60,6 +59,8 @@ class SearchResultSerieAdapter: RecyclerView.Adapter<SearchResultSerieAdapter.It
 
         holder.searchPageCount.text = "Comics: ${result.comics.items.size}"
 
-        Log.d("SearchAdapter", "${result.id}")
+        holder.searchConstraintLayout.setOnClickListener {
+            Navigation.findNavController(holder.itemView).navigate(SearchFragmentDirections.actionSearchFragmentToDetailSerieFragment(result.id))
+        }
     }
 }

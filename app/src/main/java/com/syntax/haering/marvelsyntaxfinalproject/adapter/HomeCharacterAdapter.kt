@@ -5,10 +5,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.ui.HomeFragmentDirections
 
 class HomeCharacterAdapter: RecyclerView.Adapter<HomeCharacterAdapter.ItemViewHolder>() {
 
@@ -17,6 +20,7 @@ class HomeCharacterAdapter: RecyclerView.Adapter<HomeCharacterAdapter.ItemViewHo
     inner class ItemViewHolder(view: View): ViewHolder(view){
         val characterImage: ImageView = view.findViewById(R.id.home_charImage_iv)
         val characterName: TextView = view.findViewById(R.id.home_charName_tv)
+        val characterCard: CardView = view.findViewById(R.id.home_charCard_cv)
     }
 
     fun submitList(list: MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>){
@@ -44,5 +48,9 @@ class HomeCharacterAdapter: RecyclerView.Adapter<HomeCharacterAdapter.ItemViewHo
             error(R.drawable.ic_launcher_foreground)
         }
         holder.characterName.text = character.name
+
+        holder.characterCard.setOnClickListener {
+            Navigation.findNavController(holder.itemView).navigate(HomeFragmentDirections.actionHomeFragmentToDetailCharacterFragment(character.id))
+        }
     }
 }

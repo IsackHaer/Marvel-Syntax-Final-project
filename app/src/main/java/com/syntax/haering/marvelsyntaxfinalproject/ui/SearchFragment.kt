@@ -58,6 +58,9 @@ class SearchFragment : Fragment() {
 
 
         keyboardSearchOnClick(view)
+        binding.textInputLayout.setEndIconOnClickListener {
+            binding.searchInputEdit.text = null
+        }
 
         viewModel.searchCategoryBtnState.observe(viewLifecycleOwner) {
             when (it) {

@@ -16,6 +16,14 @@ class Repository(private val MarvelApi: MarvelApi) {
     val singleCharacter: LiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>
         get() = _singleCharacter
 
+    private var _singleSerie = MutableLiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>()
+    val singleSerie: LiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>
+        get() = _singleSerie
+
+    private var _singleComic = MutableLiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>()
+    val singleComic: LiveData<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>
+        get() = _singleComic
+
 
 
     private var _searchedTermCharacter = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>>()
@@ -38,13 +46,13 @@ class Repository(private val MarvelApi: MarvelApi) {
 
 
 
-    private var _detailSeriesForCharacter = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>>()
-    val detailSeriesForCharacter: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>>
-        get() = _detailSeriesForCharacter
+    private var _detailSeriesCollection = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>>()
+    val detailSeriesCollection: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>>
+        get() = _detailSeriesCollection
 
-    private var _detailComicsForCharacter = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>()
-    val detailComicsForCharacter: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>
-        get() = _detailComicsForCharacter
+    private var _detailComicsCollection = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>()
+    val detailComicsCollection: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>
+        get() = _detailComicsCollection
 
     suspend fun loadCharacters() {
         val characterImport =  MarvelApi.retrofitService.getAllCharacters(
@@ -98,7 +106,7 @@ class Repository(private val MarvelApi: MarvelApi) {
         _homeSeriesList.value = _homeSeriesList.value
     }
 
-    suspend fun loadSingleCharacter(id:Int?){
+    suspend fun loadSingleCharacter(id:Int){
         val singleCharacterImport = MarvelApi.retrofitService.getSingleCharacter(
             apikey = Constants.API_KEY,
             ts = Constants.timestamp,
@@ -107,6 +115,27 @@ class Repository(private val MarvelApi: MarvelApi) {
         )
         _singleCharacter.value = singleCharacterImport.data.results.first()
         _singleCharacter.value = _singleCharacter.value
+    }
+
+
+    suspend fun loadSingleSerie(id: Int){
+        val singleSerieImport = MarvelApi.retrofitService.getSingleSerie(
+            apikey = Constants.API_KEY,
+            ts = Constants.timestamp,
+            hash = Constants.hash(),
+            id = id,
+        )
+        _singleSerie.value = singleSerieImport.data.results.first()
+    }
+
+    suspend fun loadSingleComic(id: Int){
+        val singleComicImport = MarvelApi.retrofitService.getSingleComic(
+            apikey = Constants.API_KEY,
+            ts = Constants.timestamp,
+            hash = Constants.hash(),
+            id = id,
+        )
+        _singleComic.value = singleComicImport.data.results.first()
     }
 
     suspend fun loadSearchedTerm(nameStartWith: String, titleStartsWith: String) {
@@ -129,25 +158,28 @@ class Repository(private val MarvelApi: MarvelApi) {
         _searchedTermSerie.value = searchedSeriesImport.data.results.toMutableList()
     }
 
-    suspend fun loadCharacterSeriesList(SeriesCollectionURI: String, ComicCollectionURI: String){
-        val url1 = SeriesCollectionURI.replace("http","https")
-        val url2 = ComicCollectionURI.replace("http","https")
-
+    suspend fun loadSeriesCollection(SeriesCollectionURI: String){
+        val url = SeriesCollectionURI.replace("http","https")
         val importSeries = MarvelApi.retrofitService.getSeriesForCharacter(
-            url= url1,
+            url= url,
             apikey = Constants.API_KEY,
             ts = Constants.timestamp,
             hash = Constants.hash()
         )
+
+        _detailSeriesCollection.value = importSeries.data.results.toMutableList()
+    }
+
+    suspend fun loadComicsCollection(ComicCollectionURI: String){
+        val url = ComicCollectionURI.replace("http","https")
 
         val importComics = MarvelApi.retrofitService.getComicsForCharacter(
-            url= url2,
+            url= url,
             apikey = Constants.API_KEY,
             ts = Constants.timestamp,
             hash = Constants.hash()
         )
 
-        _detailSeriesForCharacter.value = importSeries.data.results.toMutableList()
-        _detailComicsForCharacter.value = importComics.data.results.toMutableList()
+        _detailComicsCollection.value = importComics.data.results.toMutableList()
     }
 }

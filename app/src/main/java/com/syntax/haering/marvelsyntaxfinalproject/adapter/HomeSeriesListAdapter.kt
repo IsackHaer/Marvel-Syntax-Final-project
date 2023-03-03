@@ -6,10 +6,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.ui.HomeFragmentDirections
 
 class HomeSeriesListAdapter(): RecyclerView.Adapter<HomeSeriesListAdapter.ItemViewHolder>() {
 
@@ -46,6 +48,9 @@ class HomeSeriesListAdapter(): RecyclerView.Adapter<HomeSeriesListAdapter.ItemVi
             error(R.drawable.ic_launcher_foreground)
         }
         holder.serieTitle.text = series.title
+        holder.serieCardView.setOnClickListener {
+            Navigation.findNavController(holder.itemView).navigate(HomeFragmentDirections.actionHomeFragmentToDetailSerieFragment(series.id))
+        }
 
     }
 }

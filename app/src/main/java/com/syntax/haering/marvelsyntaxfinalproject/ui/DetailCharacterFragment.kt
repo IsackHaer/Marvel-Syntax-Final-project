@@ -11,9 +11,8 @@ import androidx.navigation.Navigation
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
 import com.syntax.haering.marvelsyntaxfinalproject.R
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailComicsAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailSeriesAdapter
-import com.syntax.haering.marvelsyntaxfinalproject.adapter.SearchResultSerieAdapter
+import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailCharacterComicsAdapter
+import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailCharacterSeriesAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailCharacterBinding
 import kotlinx.coroutines.launch
 
@@ -36,8 +35,8 @@ class DetailCharacterFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
 
-    val seriesAdapter = DetailSeriesAdapter()
-    val comicsAdapter = DetailComicsAdapter()
+    val seriesAdapter = DetailCharacterSeriesAdapter()
+    val comicsAdapter = DetailCharacterComicsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,16 +53,12 @@ class DetailCharacterFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentDetailCharacterBinding.inflate(inflater, container, false)
         val view = binding.root
-        val getID = requireArguments().getInt("ID")
+        val getID = requireArguments().getInt("CharacterID")
 
         viewModel.loadSingleCharacter(getID)
 
         viewModel.singleCharacter.observe(viewLifecycleOwner) { character ->
             setUpUi(character)
-        }
-
-        binding.detailCharBackBtn.setOnClickListener {
-            Navigation.findNavController(view).navigateUp()
         }
 
         return view
@@ -74,9 +69,10 @@ class DetailCharacterFragment : Fragment() {
     ) {
         val https = character.thumbnail.path.replace("http", "https")
 
-        viewModel.getCharacterSeriesList(character.series.collectionURI, character.comics.collectionURI)
+        viewModel.loadSerieCollection(character.series.collectionURI)
+        viewModel.loadComicCollection(character.comics.collectionURI)
 
-        binding.detailCharImageIv.load("$https/landscape_incredible.${character.thumbnail.extension}") {
+        binding.detailCharImageIv.load("$https/portrait_uncanny.${character.thumbnail.extension}") {
             placeholder(R.drawable.ic_launcher_background)
             error(R.drawable.ic_launcher_foreground)
         }
@@ -87,11 +83,15 @@ class DetailCharacterFragment : Fragment() {
         binding.detailSeriesRv.adapter = seriesAdapter
         binding.detailComicsRv.adapter = comicsAdapter
 
-        viewModel.detailSeriesForCharacter.observe(viewLifecycleOwner){
+        binding.detailCharBackBtn.setOnClickListener {
+            Navigation.findNavController(binding.root).navigateUp()
+        }
+
+        viewModel.detailSeriesCollection.observe(viewLifecycleOwner){
             lifecycleScope.launch { seriesAdapter.submitSerieList(it) }
         }
 
-        viewModel.detailComicsForCharacter.observe(viewLifecycleOwner){
+        viewModel.detailComicsCollection.observe(viewLifecycleOwner){
             lifecycleScope.launch { comicsAdapter.submitComicsList(it) }
         }
     }

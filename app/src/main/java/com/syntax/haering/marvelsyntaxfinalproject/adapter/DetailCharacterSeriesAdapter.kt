@@ -2,32 +2,34 @@ package com.syntax.haering.marvelsyntaxfinalproject.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.ItemDetailCardBinding
+import com.syntax.haering.marvelsyntaxfinalproject.ui.DetailCharacterFragmentDirections
 
-class DetailComicsAdapter: RecyclerView.Adapter<DetailComicsAdapter.ItemViewHolder>() {
+class DetailCharacterSeriesAdapter: RecyclerView.Adapter<DetailCharacterSeriesAdapter.ItemViewHolder>() {
 
-    private var comicsList = mutableListOf<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>()
+    private var seriesList = mutableListOf<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>()
 
     inner class ItemViewHolder(val binding: ItemDetailCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(comics: com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result){
+        fun bind(series: com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result){
             binding.detailCardCv.setOnClickListener {
-                TODO("code goes here")
+                Navigation.findNavController(itemView).navigate(DetailCharacterFragmentDirections.actionDetailCharacterFragmentToDetailSerieFragment(series.id))
             }
-            val https = comics.thumbnail.path.replace("http", "https")
-            binding.detailImageIv.load("$https/portrait_medium.${comics.thumbnail.extension}"){
+            val https = series.thumbnail.path.replace("http", "https")
+            binding.detailImageIv.load("$https/portrait_medium.${series.thumbnail.extension}"){
                 placeholder(R.drawable.ic_launcher_background)
                 error(R.drawable.ic_launcher_foreground)
             }
 
-            binding.detailTitleNameTv.text = comics.title
+            binding.detailTitleNameTv.text = series.title
         }
     }
 
-    fun submitComicsList(list: MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>){
-        comicsList = list
+    fun submitSerieList(list: MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>){
+        seriesList = list
         notifyDataSetChanged()
     }
 
@@ -37,10 +39,10 @@ class DetailComicsAdapter: RecyclerView.Adapter<DetailComicsAdapter.ItemViewHold
     }
 
     override fun getItemCount(): Int {
-        return comicsList.size
+        return seriesList.size
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        holder.bind(comicsList[position])
+        holder.bind(seriesList[position])
     }
 }
