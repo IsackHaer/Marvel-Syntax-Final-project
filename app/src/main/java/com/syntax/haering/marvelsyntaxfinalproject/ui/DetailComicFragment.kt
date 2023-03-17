@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
 import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailComicBinding
+import kotlinx.coroutines.launch
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -60,14 +62,16 @@ class DetailComicFragment : Fragment() {
     fun setUpUI(
         comic: com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result
     ){
-        val https = comic.thumbnail.path.replace("http", "https")
-
-        binding.detailComicImageIv.load("$https/portrait_uncanny.${comic.thumbnail.extension}") {
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+        lifecycleScope.launch {
+            val https = comic.thumbnail.path.replace("http", "https")
+            binding.detailComicImageIv.load("$https/portrait_uncanny.${comic.thumbnail.extension}") {
+                placeholder(R.drawable.marvelcomics_loading)
+                error(R.drawable.error404notfound_image)
+            }
+            binding.detailComicTitleTv.text = comic.title
+            binding.detailComicDescriptionTv.text = comic.description
         }
-        binding.detailComicTitleTv.text = comic.title
-        binding.detailComicDescriptionTv.text = comic.description
+
 
         binding.detailComicBackBtn.setOnClickListener {
             Navigation.findNavController(binding.root).navigateUp()

@@ -42,8 +42,8 @@ class HomeAdvertComicAdapter: RecyclerView.Adapter<HomeAdvertComicAdapter.ItemVi
         val https = comic.thumbnail.path.replace("http", "https")
 
         holder.comicAdvertImage.load("$https/landscape_incredible.${comic.thumbnail.extension}"){
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+            placeholder(R.drawable.marvelcomics_loading)
+            error(R.drawable.error404notfound_image)
         }
         holder.comicAdvertTitle.text = comic.title
 

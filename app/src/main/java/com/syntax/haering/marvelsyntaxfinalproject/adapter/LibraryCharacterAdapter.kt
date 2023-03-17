@@ -39,8 +39,8 @@ class LibraryCharacterAdapter: RecyclerView.Adapter<LibraryCharacterAdapter.Item
         val https = character.thumbnail.path.replace("http", "https")
 
         holder.characterImage.load("$https/portrait_medium.${character.thumbnail.extension}"){
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+            placeholder(R.drawable.marvelcomics_loading)
+            error(R.drawable.error404notfound_image)
         }
     }
 }

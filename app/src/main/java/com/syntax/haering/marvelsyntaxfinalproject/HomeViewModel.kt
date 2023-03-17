@@ -10,6 +10,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel : ViewModel() {
 
+    enum class APIStatus { LOADING, DONE, ERROR }
+
     val repository = Repository(MarvelApi)
 
     val character = repository.characters
@@ -26,10 +28,11 @@ class HomeViewModel : ViewModel() {
     val detailSeriesCollection = repository.detailSeriesCollection
     val detailComicsCollection = repository.detailComicsCollection
 
+    private var _apiStatus = MutableLiveData<APIStatus>(APIStatus.DONE)
+    val apiStatus: LiveData<APIStatus> get() = _apiStatus
 
     private var _searchCategoryBtnState = MutableLiveData<Boolean>(true)
     val searchCategoryBtnState: LiveData<Boolean> get() = _searchCategoryBtnState
-
 
     init {
         loadHomeScreenWithData()
@@ -37,9 +40,15 @@ class HomeViewModel : ViewModel() {
 
     fun loadHomeScreenWithData() {
         viewModelScope.launch {
-            repository.loadCharacters()
-            repository.loadAdvertComicList()
-            repository.loadHomeSeriesList()
+            try {
+                _apiStatus.value = APIStatus.LOADING
+                repository.loadCharacters()
+                repository.loadAdvertComicList()
+                repository.loadHomeSeriesList()
+                _apiStatus.value = APIStatus.DONE
+            } catch (e: Exception){
+                _apiStatus.value = APIStatus.ERROR
+            }
         }
     }
 

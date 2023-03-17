@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
-import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeAdvertComicAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeCharacterAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeSeriesListAdapter
@@ -36,10 +35,21 @@ class HomeFragment: Fragment() {
         val advertAdapter = HomeAdvertComicAdapter()
         val homeSeriesAdapter = HomeSeriesListAdapter()
 
-        binding.homeBottomRv.adapter = homeAdapter
         binding.homeAdvertComicRv.adapter = advertAdapter
         binding.homeSeriesRv.adapter = homeSeriesAdapter
+        binding.homeBottomRv.adapter = homeAdapter
         snapHelper.attachToRecyclerView(binding.homeAdvertComicRv)
+
+
+        viewModel.apiStatus.observe(viewLifecycleOwner){
+            when (it) {
+                HomeViewModel.APIStatus.LOADING -> binding.homeMarvelGifCv.visibility = View.VISIBLE
+                HomeViewModel.APIStatus.DONE -> binding.homeMarvelGifCv.visibility = View.GONE
+                else -> {
+                    binding.homeMarvelGifCv.visibility = View.GONE
+                }
+            }
+        }
 
         viewModel.character.observe(viewLifecycleOwner){
             lifecycleScope.launch {
@@ -56,6 +66,7 @@ class HomeFragment: Fragment() {
                 homeSeriesAdapter.submitSeriesList(it)
             }
         }
+
 
         binding.homeIronmanCv.setOnClickListener { navigateToCharacter(1009368) }
         binding.homeSpidermanCv.setOnClickListener { navigateToCharacter(1009610) }

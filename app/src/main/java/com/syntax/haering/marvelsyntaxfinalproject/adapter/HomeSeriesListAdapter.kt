@@ -44,8 +44,8 @@ class HomeSeriesListAdapter(): RecyclerView.Adapter<HomeSeriesListAdapter.ItemVi
         val https = series.thumbnail.path.replace("http", "https")
 
         holder.serieImage.load("$https/portrait_medium.${series.thumbnail.extension}"){
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+            placeholder(R.drawable.marvelcomics_loading)
+            error(R.drawable.error404notfound_image)
         }
         holder.serieTitle.text = series.title
         holder.serieCardView.setOnClickListener {

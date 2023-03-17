@@ -46,8 +46,8 @@ class SearchResultAdapter: RecyclerView.Adapter<SearchResultAdapter.ItemViewHold
         val https = result.thumbnail.path.replace("http", "https")
 
         holder.searchImage.load("$https/portrait_fantastic.${result.thumbnail.extension}"){
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+            placeholder(R.drawable.marvelcomics_loading)
+            error(R.drawable.error404notfound_image)
         }
         holder.searchTitle.text = result.name
 

@@ -69,16 +69,21 @@ class DetailCharacterFragment : Fragment() {
     ) {
         val https = character.thumbnail.path.replace("http", "https")
 
-        viewModel.loadSerieCollection(character.series.collectionURI)
-        viewModel.loadComicCollection(character.comics.collectionURI)
+        lifecycleScope.launch{
+            viewModel.loadSerieCollection(character.series.collectionURI)
+            viewModel.loadComicCollection(character.comics.collectionURI)
 
-        binding.detailCharImageIv.load("$https/portrait_uncanny.${character.thumbnail.extension}") {
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+            binding.detailCharImageIv.load("$https/portrait_uncanny.${character.thumbnail.extension}") {
+                placeholder(R.drawable.marvelcomics_loading)
+                error(R.drawable.error404notfound_image)
+            }
+
+            binding.detailCharTitleTv.text = character.name
+            binding.detailCharDescriptionTv.text = character.description
         }
 
-        binding.detailCharTitleTv.text = character.name
-        binding.detailCharDescriptionTv.text = character.description
+
+
 
         binding.detailSeriesRv.adapter = seriesAdapter
         binding.detailComicsRv.adapter = comicsAdapter

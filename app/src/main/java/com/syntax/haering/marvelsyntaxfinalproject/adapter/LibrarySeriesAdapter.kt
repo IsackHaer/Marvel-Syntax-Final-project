@@ -41,7 +41,10 @@ class LibrarySeriesAdapter: RecyclerView.Adapter<LibrarySeriesAdapter.ItemViewHo
         val serie = dataset[position]
         val https = serie.thumbnail.path.replace("http", "https")
 
-        holder.LibraryImage.load("$https/portrait_small.${serie.thumbnail.extension}")
+        holder.LibraryImage.load("$https/portrait_small.${serie.thumbnail.extension}"){
+            placeholder(R.drawable.marvelcomics_loading)
+            error(R.drawable.error404notfound_image)
+        }
         holder.LibraryTitle.text = serie.title
         holder.LibraryCreator.text = serie.creators.items.first().name
 

@@ -65,7 +65,7 @@ class Repository(private val MarvelApi: MarvelApi) {
 
         _characters.value?.addAll(characterImport.data.results)
         /*for (i in 99..characterImport.data.total step 100){
-            _character.value?.addAll(MarvelApi.retrofitService.getAllCharacters(
+            _characters.value?.addAll(MarvelApi.retrofitService.getAllCharacters(
                 apikey = Constants.API_KEY,
                 ts = Constants.timestamp,
                 hash = Constants.hash(),
@@ -160,11 +160,12 @@ class Repository(private val MarvelApi: MarvelApi) {
 
     suspend fun loadSeriesCollection(SeriesCollectionURI: String){
         val url = SeriesCollectionURI.replace("http","https")
-        val importSeries = MarvelApi.retrofitService.getSeriesForCharacter(
+        val importSeries = MarvelApi.retrofitService.getSeriesCollection(
             url= url,
             apikey = Constants.API_KEY,
             ts = Constants.timestamp,
-            hash = Constants.hash()
+            hash = Constants.hash(),
+            limit = 90
         )
 
         _detailSeriesCollection.value = importSeries.data.results.toMutableList()
@@ -173,11 +174,12 @@ class Repository(private val MarvelApi: MarvelApi) {
     suspend fun loadComicsCollection(ComicCollectionURI: String){
         val url = ComicCollectionURI.replace("http","https")
 
-        val importComics = MarvelApi.retrofitService.getComicsForCharacter(
+        val importComics = MarvelApi.retrofitService.getComicsCollection(
             url= url,
             apikey = Constants.API_KEY,
             ts = Constants.timestamp,
-            hash = Constants.hash()
+            hash = Constants.hash(),
+            limit = 90
         )
 
         _detailComicsCollection.value = importComics.data.results.toMutableList()

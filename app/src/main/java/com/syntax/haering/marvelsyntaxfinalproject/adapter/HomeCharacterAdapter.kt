@@ -44,8 +44,8 @@ class HomeCharacterAdapter: RecyclerView.Adapter<HomeCharacterAdapter.ItemViewHo
         val https = character.thumbnail.path.replace("http", "https")
 
         holder.characterImage.load("$https/portrait_fantastic.${character.thumbnail.extension}"){
-            placeholder(R.drawable.ic_launcher_background)
-            error(R.drawable.ic_launcher_foreground)
+            placeholder(R.drawable.marvelcomics_loading)
+            error(R.drawable.error404notfound_image)
         }
         holder.characterName.text = character.name
 

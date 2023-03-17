@@ -4,23 +4,26 @@
 
     <item
         android:id="@+id/homeFragment"
-        android:checkable="false"
         android:icon="@drawable/baseline_home_24"
+        android:enabled="true"
         android:title="Home" />
 
     <item
         android:id="@+id/searchFragment"
         android:icon="@drawable/baseline_search_24"
+        android:enabled="true"
         android:title="Search" />
 
     <item
         android:id="@+id/libraryFragment"
         android:icon="@drawable/baseline_bookmark_24"
+        android:enabled="true"
         android:title="Library" />
 
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/baseline_account_circle_24"
+        android:enabled="true"
         android:title="Profile" />
 
 </menu>

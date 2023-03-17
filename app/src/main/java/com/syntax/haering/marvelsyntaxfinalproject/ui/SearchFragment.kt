@@ -98,7 +98,7 @@ class SearchFragment : Fragment() {
                 binding.searchCharacterBtn.setBackgroundColor(
                     getColor(
                         resources,
-                        com.google.android.material.R.color.design_default_color_primary,
+                        R.color.marvel_red,
                         null
                     )
                 )
@@ -127,7 +127,7 @@ class SearchFragment : Fragment() {
                 binding.searchSeriesBtn.setBackgroundColor(
                     getColor(
                         resources,
-                        com.google.android.material.R.color.design_default_color_primary,
+                        R.color.marvel_red,
                         null
                     )
                 )

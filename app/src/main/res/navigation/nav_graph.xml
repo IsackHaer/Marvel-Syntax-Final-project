@@ -12,13 +12,25 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_detailCharacterFragment"
-            app:destination="@id/detailCharacterFragment" />
+            app:destination="@id/detailCharacterFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
         <action
             android:id="@+id/action_homeFragment_to_detailSerieFragment"
-            app:destination="@id/detailSerieFragment" />
+            app:destination="@id/detailSerieFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
         <action
             android:id="@+id/action_homeFragment_to_detailComicFragment"
-            app:destination="@id/detailComicFragment" />
+            app:destination="@id/detailComicFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -27,10 +39,18 @@
         tools:layout="@layout/fragment_search" >
         <action
             android:id="@+id/action_searchFragment_to_detailCharacterFragment"
-            app:destination="@id/detailCharacterFragment" />
+            app:destination="@id/detailCharacterFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
         <action
             android:id="@+id/action_searchFragment_to_detailSerieFragment"
-            app:destination="@id/detailSerieFragment" />
+            app:destination="@id/detailSerieFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
     </fragment>
     <fragment
         android:id="@+id/libraryFragment"
@@ -39,10 +59,18 @@
         tools:layout="@layout/fragment_library" >
         <action
             android:id="@+id/action_libraryFragment_to_detailCharacterFragment"
-            app:destination="@id/detailCharacterFragment" />
+            app:destination="@id/detailCharacterFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
         <action
             android:id="@+id/action_libraryFragment_to_detailSerieFragment"
-            app:destination="@id/detailSerieFragment" />
+            app:destination="@id/detailSerieFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -59,10 +87,18 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_detailCharacterFragment_to_detailSerieFragment"
-            app:destination="@id/detailSerieFragment" />
+            app:destination="@id/detailSerieFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
         <action
             android:id="@+id/action_detailCharacterFragment_to_detailComicFragment"
-            app:destination="@id/detailComicFragment" />
+            app:destination="@id/detailComicFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
     </fragment>
     <fragment
         android:id="@+id/detailSerieFragment"
@@ -77,7 +113,11 @@
             app:argType="integer" />
         <action
             android:id="@+id/action_detailSerieFragment_to_detailComicFragment"
-            app:destination="@id/detailComicFragment" />
+            app:destination="@id/detailComicFragment"
+            app:enterAnim="@anim/swipe_in_from_right"
+            app:exitAnim="@anim/swipe_out_from_right"
+            app:popEnterAnim="@anim/swipe_in_from_left"
+            app:popExitAnim="@anim/swipe_out_from_left" />
     </fragment>
     <fragment
         android:id="@+id/detailComicFragment"

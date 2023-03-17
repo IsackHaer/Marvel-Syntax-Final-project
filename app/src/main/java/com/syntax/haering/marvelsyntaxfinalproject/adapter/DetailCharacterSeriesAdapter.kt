@@ -20,8 +20,8 @@ class DetailCharacterSeriesAdapter: RecyclerView.Adapter<DetailCharacterSeriesAd
             }
             val https = series.thumbnail.path.replace("http", "https")
             binding.detailImageIv.load("$https/portrait_medium.${series.thumbnail.extension}"){
-                placeholder(R.drawable.ic_launcher_background)
-                error(R.drawable.ic_launcher_foreground)
+                placeholder(R.drawable.marvelcomics_loading)
+                error(R.drawable.error404notfound_image)
             }
 
             binding.detailTitleNameTv.text = series.title

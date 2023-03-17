@@ -20,11 +20,16 @@
         tools:layout="@layout/fragment_home" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/activityMain_bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/activityMain_bottomNavigation"
+        android:background="@color/marvel_red"
+        app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator2"
+        app:itemIconTint="@color/bottom_navigation_icon_colors"
+        app:itemTextColor="@color/bottom_navigation_icon_colors"
+        app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:menu="@menu/nav_menu"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/nav_menu" />
 </androidx.constraintlayout.widget.ConstraintLayout>

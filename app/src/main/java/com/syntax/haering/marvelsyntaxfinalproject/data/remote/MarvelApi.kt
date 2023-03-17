@@ -95,18 +95,20 @@ interface MarvelApiService {
     ) : SerieDTO
 
     @GET
-    suspend fun getSeriesForCharacter(
+    suspend fun getSeriesCollection(
         @Url url: String,
         @Query("ts") ts: String = Constants.timestamp,
         @Query("apikey") apikey: String = Constants.API_KEY,
         @Query("hash") hash: String = Constants.hash(),
+    @Query("limit") limit: Int
     ) : SerieDTO
     @GET
-    suspend fun getComicsForCharacter(
+    suspend fun getComicsCollection(
         @Url url: String,
         @Query("ts") ts: String = Constants.timestamp,
         @Query("apikey") apikey: String = Constants.API_KEY,
         @Query("hash") hash: String = Constants.hash(),
+        @Query("limit") limit: Int
     ) : ComicDTO
 }
 
