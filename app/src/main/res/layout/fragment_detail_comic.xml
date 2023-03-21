@@ -19,12 +19,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <TextView
+                android:id="@+id/detailComic_issueNR_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="90"
+                app:layout_constraintBottom_toBottomOf="@+id/detailComics_cv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/detailComics_cv"
+                app:layout_constraintTop_toTopOf="@+id/detailComics_cv"
+                tools:text="Issue: 1.0" />
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/detailComics_cv"
                 android:layout_width="300dp"
                 android:layout_height="450dp"
-                app:cardCornerRadius="18dp"
                 android:layout_marginTop="16dp"
+                app:cardCornerRadius="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -45,8 +56,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:textAppearance="@style/martel_sans_marvel"
                 android:gravity="center"
+                android:textAppearance="@style/martel_sans_marvel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailComics_cv"
@@ -66,6 +77,79 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detailComic_title_tv"
                 tools:text='Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry&apos;s standard dummy text ever since the 1500s, when an unknown printer took a galley' />
+
+            <TextView
+                android:id="@+id/CREATORS_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="CREATORS:"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailComic_description_tv" />
+
+            <TextView
+                android:id="@+id/detailComic_creators_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/CREATORS_tv"
+                tools:text="creators of this comic" />
+
+            <TextView
+                android:id="@+id/detailComic_isbn_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailComic_creators_tv"
+                tools:text="ISBN: 1382741832746184" />
+
+            <TextView
+                android:id="@+id/detailComic_issn_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detailComic_isbn_tv"
+                tools:text="ISSN: 1382741832746184" />
+
+            <TextView
+                android:id="@+id/detailComic_pageCount_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/detailComic_isbn_tv"
+                tools:text="page count: 130" />
+
+            <TextView
+                android:id="@+id/detailComic_price_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="16sp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/detailComic_issn_tv"
+                tools:text="price: 15.00$" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

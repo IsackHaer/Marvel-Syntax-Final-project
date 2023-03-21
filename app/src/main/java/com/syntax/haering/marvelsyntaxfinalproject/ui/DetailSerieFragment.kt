@@ -83,8 +83,16 @@ class DetailSerieFragment : Fragment() {
             Navigation.findNavController(binding.root).navigateUp()
         }
 
+        viewModel.loadComicStatus.observe(viewLifecycleOwner){
+            when (it){
+                HomeViewModel.APIStatus.LOADING -> binding.detailSerieComicProgressBar.visibility = View.VISIBLE
+                else -> binding.detailSerieComicProgressBar.visibility = View.GONE
+            }
+        }
+
         viewModel.detailComicsCollection.observe(viewLifecycleOwner){
-            comicAdapter.submitComicsList(it)
+            val sortedByIssue = it.sortedBy { it.issueNumber }.toMutableList()
+            comicAdapter.submitComicsList(sortedByIssue)
         }
     }
 

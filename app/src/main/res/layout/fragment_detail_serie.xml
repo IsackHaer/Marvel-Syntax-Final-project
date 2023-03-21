@@ -93,6 +93,15 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:listitem="@layout/item_detail_card"/>
 
+            <ProgressBar
+                android:id="@+id/detailSerie_comic_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/detailSeries_comicCollection_rv"
+                app:layout_constraintTop_toBottomOf="@+id/detailSeries_comicCollection_tv" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

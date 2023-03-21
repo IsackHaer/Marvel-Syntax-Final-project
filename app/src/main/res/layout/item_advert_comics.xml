@@ -20,7 +20,7 @@
         android:id="@+id/item_advertComic_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="#99000000"
+        android:background="#CCEC181F"
         android:maxHeight="80dp"
         android:minHeight="40dp"
         android:textAlignment="center"

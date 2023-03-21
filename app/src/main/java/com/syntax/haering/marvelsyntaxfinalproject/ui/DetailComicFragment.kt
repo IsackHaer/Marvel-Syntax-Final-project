@@ -62,6 +62,12 @@ class DetailComicFragment : Fragment() {
     fun setUpUI(
         comic: com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result
     ){
+        val creatorsList: MutableList<String> = mutableListOf()
+
+        for (i in comic.creators.items){
+            creatorsList.add(i.name)
+        }
+
         lifecycleScope.launch {
             val https = comic.thumbnail.path.replace("http", "https")
             binding.detailComicImageIv.load("$https/portrait_uncanny.${comic.thumbnail.extension}") {
@@ -69,7 +75,13 @@ class DetailComicFragment : Fragment() {
                 error(R.drawable.error404notfound_image)
             }
             binding.detailComicTitleTv.text = comic.title
+            binding.detailComicIssueNRTv.text = "Issue: ${ comic.issueNumber }"
             binding.detailComicDescriptionTv.text = comic.description
+            binding.detailComicCreatorsTv.text = creatorsList.toString()
+            binding.detailComicIsbnTv.text = "ISBN: ${comic.isbn}"
+            binding.detailComicIssnTv.text = "ISSN: ${ comic.issn }"
+            binding.detailComicPageCountTv.text = "Pages: ${ comic.pageCount }"
+            binding.detailComicPriceTv.text = "Price: ${ comic.prices.first().price }\$"
         }
 
 

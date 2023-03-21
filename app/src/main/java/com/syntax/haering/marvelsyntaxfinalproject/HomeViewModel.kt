@@ -1,5 +1,6 @@
 package com.syntax.haering.marvelsyntaxfinalproject
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +31,12 @@ class HomeViewModel : ViewModel() {
 
     private var _apiStatus = MutableLiveData<APIStatus>(APIStatus.DONE)
     val apiStatus: LiveData<APIStatus> get() = _apiStatus
+    
+    private var _loadComicStatus = MutableLiveData(APIStatus.DONE)
+    val loadComicStatus: LiveData<APIStatus> get() = _loadComicStatus
+    
+    private var _loadSerieStatus = MutableLiveData(APIStatus.DONE)
+    val loadSerieStatus: LiveData<APIStatus> get() = _loadSerieStatus
 
     private var _searchCategoryBtnState = MutableLiveData<Boolean>(true)
     val searchCategoryBtnState: LiveData<Boolean> get() = _searchCategoryBtnState
@@ -72,7 +79,14 @@ class HomeViewModel : ViewModel() {
 
     fun searchedTerm(namesStartWith: String, titleStartsWith: String) {
         viewModelScope.launch {
-            repository.loadSearchedTerm(namesStartWith, titleStartsWith)
+            try {
+                _apiStatus.value = APIStatus.LOADING
+                repository.loadSearchedTerm(namesStartWith, titleStartsWith)
+                _apiStatus.value = APIStatus.DONE
+            } catch (e: Exception){
+                _apiStatus.value = APIStatus.ERROR
+                Log.d("MainViewModel","could not load searchTerm : $e")
+            }
         }
     }
 
@@ -86,13 +100,29 @@ class HomeViewModel : ViewModel() {
 
     fun loadSerieCollection(SeriesCollectionURI: String){
         viewModelScope.launch {
-            repository.loadSeriesCollection(SeriesCollectionURI)
+            try {
+                _loadSerieStatus.value = APIStatus.LOADING
+                repository.loadSeriesCollection(SeriesCollectionURI)
+                _loadSerieStatus.value = APIStatus.DONE
+            } catch (e: Exception){
+                _loadSerieStatus.value = APIStatus.ERROR
+                Log.d("HomeViewModel","could not load Serie collection: $e")
+            }
+
         }
     }
 
     fun loadComicCollection(ComicsCollectionURI: String){
         viewModelScope.launch {
-            repository.loadComicsCollection(ComicsCollectionURI)
+            try {
+                _loadComicStatus.value = APIStatus.LOADING
+                repository.loadComicsCollection(ComicsCollectionURI)
+                _loadComicStatus.value = APIStatus.DONE
+            } catch (e: Exception){
+                _loadComicStatus.value = APIStatus.ERROR
+                Log.d("HomeViewModel","could not load Comics collection: $e")
+            }
+
         }
     }
 }

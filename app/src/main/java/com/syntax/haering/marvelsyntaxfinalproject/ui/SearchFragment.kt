@@ -57,9 +57,29 @@ class SearchFragment : Fragment() {
 
 
 
-        keyboardSearchOnClick(view)
+        lifecycleScope.launch {
+            keyboardSearchOnClick(view)
+        }
+
         binding.textInputLayout.setEndIconOnClickListener {
             binding.searchInputEdit.text = null
+        }
+
+        viewModel.apiStatus.observe(viewLifecycleOwner){
+            when(it){
+                HomeViewModel.APIStatus.LOADING -> {
+                    binding.searchProgressBar.visibility = View.VISIBLE
+                    binding.searchErrorIv.visibility = View.GONE
+                }
+                HomeViewModel.APIStatus.ERROR -> {
+                    binding.searchProgressBar.visibility = View.GONE
+                    binding.searchErrorIv.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.searchProgressBar.visibility = View.GONE
+                    binding.searchErrorIv.visibility = View.GONE
+                }
+            }
         }
 
         viewModel.searchCategoryBtnState.observe(viewLifecycleOwner) {

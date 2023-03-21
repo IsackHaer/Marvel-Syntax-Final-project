@@ -70,6 +70,7 @@ class DetailCharacterFragment : Fragment() {
         val https = character.thumbnail.path.replace("http", "https")
 
         lifecycleScope.launch{
+
             viewModel.loadSerieCollection(character.series.collectionURI)
             viewModel.loadComicCollection(character.comics.collectionURI)
 
@@ -83,8 +84,6 @@ class DetailCharacterFragment : Fragment() {
         }
 
 
-
-
         binding.detailSeriesRv.adapter = seriesAdapter
         binding.detailComicsRv.adapter = comicsAdapter
 
@@ -92,12 +91,36 @@ class DetailCharacterFragment : Fragment() {
             Navigation.findNavController(binding.root).navigateUp()
         }
 
+        viewModel.loadSerieStatus.observe(viewLifecycleOwner){
+            when (it){
+                HomeViewModel.APIStatus.LOADING -> {
+                    binding.detailCharSeriesProgressBar.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.detailCharSeriesProgressBar.visibility = View.GONE
+                }
+            }
+        }
+
+        viewModel.loadComicStatus.observe(viewLifecycleOwner){
+            when (it){
+                HomeViewModel.APIStatus.LOADING -> {
+                    binding.detailCharComicsProgressBar.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.detailCharComicsProgressBar.visibility = View.GONE
+                }
+            }
+        }
+
         viewModel.detailSeriesCollection.observe(viewLifecycleOwner){
-            lifecycleScope.launch { seriesAdapter.submitSerieList(it) }
+            val sortedByEndYear = it.sortedBy { it.endYear }.toMutableList()
+            lifecycleScope.launch { seriesAdapter.submitSerieList(sortedByEndYear) }
         }
 
         viewModel.detailComicsCollection.observe(viewLifecycleOwner){
-            lifecycleScope.launch { comicsAdapter.submitComicsList(it) }
+            val sortedByIssue = it.sortedBy { it.issueNumber }.toMutableList()
+            lifecycleScope.launch { comicsAdapter.submitComicsList(sortedByIssue) }
         }
     }
 

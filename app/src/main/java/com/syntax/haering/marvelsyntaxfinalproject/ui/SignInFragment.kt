@@ -46,7 +46,6 @@ class SignInFragment : Fragment() {
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // TODO: code goes here
 
         binding.signInBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_homeFragment)
