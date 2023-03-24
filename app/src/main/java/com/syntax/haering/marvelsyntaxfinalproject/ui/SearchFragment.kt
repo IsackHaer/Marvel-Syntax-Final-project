@@ -82,6 +82,7 @@ class SearchFragment : Fragment() {
             }
         }
 
+        //Submits the proper list to the RV depending on the category
         viewModel.searchCategoryBtnState.observe(viewLifecycleOwner) {
             when (it) {
                 true -> {

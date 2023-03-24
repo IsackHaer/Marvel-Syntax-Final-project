@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.syntax.haering.marvelsyntaxfinalproject.data.Repository
 import com.syntax.haering.marvelsyntaxfinalproject.data.remote.MarvelApi
 import kotlinx.coroutines.launch
@@ -14,6 +16,9 @@ class HomeViewModel : ViewModel() {
     enum class APIStatus { LOADING, DONE, ERROR }
 
     val repository = Repository(MarvelApi)
+    val authentification = Firebase.auth
+    var currentUser = authentification.currentUser
+
 
     val character = repository.characters
     val advertComics = repository.comicAdverts

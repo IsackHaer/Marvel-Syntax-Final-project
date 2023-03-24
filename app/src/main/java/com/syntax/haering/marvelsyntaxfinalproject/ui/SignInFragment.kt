@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.ktx.Firebase
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
 import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentSignInBinding
@@ -30,6 +33,7 @@ class SignInFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -46,13 +50,27 @@ class SignInFragment : Fragment() {
         _binding = FragmentSignInBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        /*if (viewModel.currentUser != null) {
+            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_homeFragment)
+        }*/
 
         binding.signInBtn.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_homeFragment)
+            val email = binding.signInUsernameEdit.text.toString()
+            val password = binding.signInPasswordEdit.text.toString()
+            viewModel.authentification.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(requireActivity()) {
+                    if (it.isSuccessful){
+                        Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_homeFragment)
+                    } else {
+                        Toast.makeText(requireContext(), "E-Mail or Password is wrong", Toast.LENGTH_LONG).show()
+                    }
+                }
+
         }
 
         binding.signInRegisterTv.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_registerFragment)
+            Navigation.findNavController(view)
+                .navigate(R.id.action_signInFragment_to_registerFragment)
         }
 
         return view

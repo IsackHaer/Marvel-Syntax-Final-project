@@ -1,10 +1,12 @@
 package com.syntax.haering.marvelsyntaxfinalproject.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
@@ -47,10 +49,28 @@ class RegisterFragment : Fragment() {
         val view = binding.root
 
 
-        // TODO: code goes here
 
         binding.registerBtn.setOnClickListener {
-            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment)
+            val email = binding.registerUsernameEdit.text.toString()
+            val pass1 = binding.registerPasswordEdit.text.toString()
+            val pass2 = binding.registerConfirmPasswordEdit.text.toString()
+
+            Log.d("RegisterFragment", "$email, $pass1, $pass2")
+
+            if (pass1 == pass2){
+                viewModel.authentification.createUserWithEmailAndPassword(email, pass2)
+                    .addOnCompleteListener(requireActivity()) { Task ->
+                        if (Task.isSuccessful){
+                            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment)
+                        } else {
+                            Toast.makeText(requireContext(), "Authentification Failed", Toast.LENGTH_LONG).show()
+                            Log.d("RegisterFragment", "Signup Failed", Task.exception)
+                        }
+                    }
+            } else {
+                Toast.makeText(requireContext(), "Password does not match", Toast.LENGTH_LONG).show()
+            }
+
         }
 
         binding.registerSignInTv.setOnClickListener {

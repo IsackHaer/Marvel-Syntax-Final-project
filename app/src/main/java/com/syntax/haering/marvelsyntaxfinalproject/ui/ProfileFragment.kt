@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
+import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentProfileBinding
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,7 +47,7 @@ class ProfileFragment : Fragment() {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        // TODO: code goes here
+        setupUI(view)
 
         return view
     }
@@ -71,5 +74,19 @@ class ProfileFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    private fun setupUI(view: View){
+        val email = viewModel.currentUser!!.email
+        val index = email!!.indexOf("@")
+        val username = email.substring(0,index)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+
+        binding.profileWelcomeTv.text = "Welcome $username"
+
+        binding.profileSignOutBtn.setOnClickListener {
+            viewModel.authentification.signOut()
+            Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_signInFragment)
+        }
     }
 }

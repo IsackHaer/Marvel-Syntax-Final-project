@@ -2,10 +2,14 @@ package com.syntax.haering.marvelsyntaxfinalproject.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.syntax.haering.marvelsyntaxfinalproject.data.remote.Constants
 import com.syntax.haering.marvelsyntaxfinalproject.data.remote.MarvelApi
 
 class Repository(private val MarvelApi: MarvelApi) {
+
+    val dataBase = Firebase.firestore
 
     private var _characters =
         MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>>(mutableListOf())
