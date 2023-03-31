@@ -77,16 +77,22 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setupUI(view: View){
-        val email = viewModel.currentUser!!.email
-        val index = email!!.indexOf("@")
-        val username = email.substring(0,index)
-            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        viewModel.currentUser.observe(viewLifecycleOwner){ firebaseUser ->
+            if (firebaseUser == null){
+                Navigation.findNavController(view).navigate(R.id.signInFragment)
+            } else {
+                val email = firebaseUser.email
+                val index = email!!.indexOf("@")
+                val username = email.substring(0,index)
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
 
-        binding.profileWelcomeTv.text = "Welcome $username"
+                binding.profileWelcomeTv.text = "Welcome $username"
+            }
+        }
+
 
         binding.profileSignOutBtn.setOnClickListener {
-            viewModel.authentification.signOut()
-            Navigation.findNavController(view).navigate(R.id.action_profileFragment_to_signInFragment)
+            viewModel.signOut()
         }
     }
 }

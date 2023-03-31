@@ -57,20 +57,27 @@ class SignInFragment : Fragment() {
         binding.signInBtn.setOnClickListener {
             val email = binding.signInUsernameEdit.text.toString()
             val password = binding.signInPasswordEdit.text.toString()
-            viewModel.authentification.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(requireActivity()) {
-                    if (it.isSuccessful){
-                        Navigation.findNavController(view).navigate(R.id.action_signInFragment_to_homeFragment)
-                    } else {
-                        Toast.makeText(requireContext(), "E-Mail or Password is wrong", Toast.LENGTH_LONG).show()
-                    }
-                }
 
+            if (email.isNotEmpty() && password.isNotEmpty()){
+                viewModel.signIn(email, password)
+            }
         }
 
         binding.signInRegisterTv.setOnClickListener {
             Navigation.findNavController(view)
                 .navigate(R.id.action_signInFragment_to_registerFragment)
+        }
+
+        viewModel.currentUser.observe(viewLifecycleOwner){
+            if (it != null){
+                Navigation.findNavController(view).navigate(R.id.homeFragment)
+            }
+        }
+
+        viewModel.toast.observe(viewLifecycleOwner){
+            if (it != null){
+                Snackbar.make(view, it, Snackbar.LENGTH_LONG).show()
+            }
         }
 
         return view

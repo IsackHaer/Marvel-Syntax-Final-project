@@ -51,7 +51,20 @@ class LibraryFragment : Fragment() {
         binding.libraryCharactersRv.adapter = characterAdapter
         binding.librarySeriesRv.adapter = seriesAdapter
 
-        //TODO code goes here
+        viewModel.loadLibraryCharList()
+        viewModel.loadLibrarySeriesList()
+
+        viewModel.libraryCharList.observe(viewLifecycleOwner){
+            if (it != null) {
+                characterAdapter.submitSavedCharacters(it)
+            }
+        }
+
+        viewModel.librarySeriesList.observe(viewLifecycleOwner){
+            if (it != null) {
+                seriesAdapter.submitSavedSeries(it)
+            }
+        }
 
         return view
     }

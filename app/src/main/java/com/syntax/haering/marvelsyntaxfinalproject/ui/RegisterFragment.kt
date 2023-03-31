@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import com.google.android.material.snackbar.Snackbar
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
 import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentRegisterBinding
@@ -58,23 +59,27 @@ class RegisterFragment : Fragment() {
             Log.d("RegisterFragment", "$email, $pass1, $pass2")
 
             if (pass1 == pass2){
-                viewModel.authentification.createUserWithEmailAndPassword(email, pass2)
-                    .addOnCompleteListener(requireActivity()) { Task ->
-                        if (Task.isSuccessful){
-                            Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_homeFragment)
-                        } else {
-                            Toast.makeText(requireContext(), "Authentification Failed", Toast.LENGTH_LONG).show()
-                            Log.d("RegisterFragment", "Signup Failed", Task.exception)
-                        }
-                    }
+                viewModel.register(email, pass2)
             } else {
-                Toast.makeText(requireContext(), "Password does not match", Toast.LENGTH_LONG).show()
+                Snackbar.make(view, "Passwords does not match",Snackbar.LENGTH_LONG).show()
             }
 
         }
 
         binding.registerSignInTv.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_signInFragment)
+        }
+
+        viewModel.currentUser.observe(viewLifecycleOwner){
+            if (it != null){
+                Navigation.findNavController(view).navigate(R.id.homeFragment)
+            }
+        }
+
+        viewModel.toast.observe(viewLifecycleOwner){
+            if (it != null){
+                Snackbar.make(view, it, Snackbar.LENGTH_LONG).show()
+            }
         }
 
         return view

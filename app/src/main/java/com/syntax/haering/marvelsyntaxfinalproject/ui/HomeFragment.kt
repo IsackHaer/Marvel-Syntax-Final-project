@@ -1,6 +1,7 @@
 package com.syntax.haering.marvelsyntaxfinalproject.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.PagerSnapHelper
 import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
+import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeAdvertComicAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeCharacterAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.HomeSeriesListAdapter
@@ -18,6 +20,7 @@ import kotlinx.coroutines.launch
 
 
 class HomeFragment: Fragment() {
+    private val TAG = "HomeFragment"
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -40,34 +43,6 @@ class HomeFragment: Fragment() {
         binding.homeBottomRv.adapter = homeAdapter
         snapHelper.attachToRecyclerView(binding.homeAdvertComicRv)
 
-
-        viewModel.apiStatus.observe(viewLifecycleOwner){
-            when (it) {
-                HomeViewModel.APIStatus.LOADING -> binding.homeMarvelGifCv.visibility = View.VISIBLE
-                HomeViewModel.APIStatus.DONE -> binding.homeMarvelGifCv.visibility = View.GONE
-                else -> {
-                    binding.homeMarvelGifCv.visibility = View.GONE
-                }
-            }
-        }
-
-        viewModel.character.observe(viewLifecycleOwner){
-            lifecycleScope.launch {
-                homeAdapter.submitList(it)
-            }
-        }
-        viewModel.advertComics.observe(viewLifecycleOwner){
-            lifecycleScope.launch {
-                advertAdapter.submitComicAdverts(it)
-            }
-        }
-        viewModel.homeSeriesList.observe(viewLifecycleOwner){
-            lifecycleScope.launch {
-                homeSeriesAdapter.submitSeriesList(it)
-            }
-        }
-
-
         binding.homeIronmanCv.setOnClickListener { navigateToCharacter(1009368) }
         binding.homeSpidermanCv.setOnClickListener { navigateToCharacter(1009610) }
         binding.homeThorCv.setOnClickListener { navigateToCharacter(1009664) }
@@ -85,6 +60,36 @@ class HomeFragment: Fragment() {
         binding.homeUltronCv.setOnClickListener { navigateToCharacter(1009685) }
         binding.homeBullseyeCv.setOnClickListener { navigateToCharacter(1009212) }
         binding.homeThanosCv.setOnClickListener { navigateToCharacter(1009652) }
+
+
+        viewModel.loadLibraryCharList()
+        viewModel.loadLibrarySeriesList()
+
+        viewModel.currentUser.observe(viewLifecycleOwner){
+            if (it == null){
+                Navigation.findNavController(view).navigate(R.id.signInFragment)
+            }
+        }
+
+        viewModel.apiStatus.observe(viewLifecycleOwner){
+            when (it) {
+                HomeViewModel.APIStatus.LOADING -> binding.homeMarvelGifCv.visibility = View.VISIBLE
+                HomeViewModel.APIStatus.DONE -> binding.homeMarvelGifCv.visibility = View.GONE
+                else -> {
+                    binding.homeMarvelGifCv.visibility = View.GONE
+                }
+            }
+        }
+
+        viewModel.character.observe(viewLifecycleOwner){
+                homeAdapter.submitList(it)
+        }
+        viewModel.advertComics.observe(viewLifecycleOwner){
+                advertAdapter.submitComicAdverts(it)
+        }
+        viewModel.homeSeriesList.observe(viewLifecycleOwner){
+                homeSeriesAdapter.submitSeriesList(it)
+        }
 
         return view
     }

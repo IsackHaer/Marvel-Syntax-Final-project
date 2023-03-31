@@ -15,6 +15,7 @@ import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailCharacterComics
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailCharacterSeriesAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailCharacterBinding
 import kotlinx.coroutines.launch
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -70,7 +71,6 @@ class DetailCharacterFragment : Fragment() {
         val https = character.thumbnail.path.replace("http", "https")
 
         lifecycleScope.launch{
-
             viewModel.loadSerieCollection(character.series.collectionURI)
             viewModel.loadComicCollection(character.comics.collectionURI)
 
@@ -88,8 +88,37 @@ class DetailCharacterFragment : Fragment() {
         binding.detailComicsRv.adapter = comicsAdapter
 
         binding.detailCharBackBtn.setOnClickListener {
+            viewModel.detailSeriesCollection.value?.clear()
+            viewModel.detailComicsCollection.value?.clear()
             Navigation.findNavController(binding.root).navigateUp()
         }
+
+
+        viewModel.libraryCharList.observe(viewLifecycleOwner){ list ->
+            if (list != null) {
+                viewModel.isCharInLibrary(character.id, list)
+
+                viewModel.isSavedInLibrary.observe(viewLifecycleOwner){
+                    when (it) {
+                        true -> {
+                            binding.detailCharFavBtn.setImageResource(R.drawable.baseline_star_24)
+                            binding.detailCharFavBtn.setOnClickListener {
+                                viewModel.deleteLibraryChar(character.id.toString())
+                                viewModel.isCharInLibrary(character.id, list)
+                            }
+                        }
+                        else -> {
+                            binding.detailCharFavBtn.setImageResource(R.drawable.baseline_star_border_24)
+                            binding.detailCharFavBtn.setOnClickListener {
+                                viewModel.addLibraryChar(character.id.toString(), Date())
+                                viewModel.isCharInLibrary(character.id, list)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         viewModel.loadSerieStatus.observe(viewLifecycleOwner){
             when (it){
@@ -102,6 +131,7 @@ class DetailCharacterFragment : Fragment() {
             }
         }
 
+
         viewModel.loadComicStatus.observe(viewLifecycleOwner){
             when (it){
                 HomeViewModel.APIStatus.LOADING -> {
@@ -112,6 +142,7 @@ class DetailCharacterFragment : Fragment() {
                 }
             }
         }
+
 
         viewModel.detailSeriesCollection.observe(viewLifecycleOwner){
             val sortedByEndYear = it.sortedBy { it.endYear }.toMutableList()

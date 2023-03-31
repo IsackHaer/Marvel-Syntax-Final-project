@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/signInFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -76,11 +76,7 @@
         android:id="@+id/profileFragment"
         android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" >
-        <action
-            android:id="@+id/action_profileFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/detailCharacterFragment"
         android:name="com.syntax.haering.marvelsyntaxfinalproject.ui.DetailCharacterFragment"
@@ -140,9 +136,6 @@
         <action
             android:id="@+id/action_signInFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_signInFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -152,8 +145,5 @@
         <action
             android:id="@+id/action_registerFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
-        <action
-            android:id="@+id/action_registerFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>

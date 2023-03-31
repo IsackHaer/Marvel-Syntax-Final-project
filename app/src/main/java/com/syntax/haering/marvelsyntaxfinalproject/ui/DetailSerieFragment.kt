@@ -63,6 +63,9 @@ class DetailSerieFragment : Fragment() {
     fun setUpUI(
         serie: com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result
     ) {
+
+        viewModel.loadLibrarySeriesList()
+
         lifecycleScope.launch {
             val https = serie.thumbnail.path.replace("http", "https")
             viewModel.loadComicCollection(serie.comics.collectionURI)

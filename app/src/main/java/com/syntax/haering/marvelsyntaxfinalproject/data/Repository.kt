@@ -1,15 +1,18 @@
 package com.syntax.haering.marvelsyntaxfinalproject.data
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.syntax.haering.marvelsyntaxfinalproject.HomeViewModel
+import com.syntax.haering.marvelsyntaxfinalproject.data.model.FirestoreSaveModel
 import com.syntax.haering.marvelsyntaxfinalproject.data.remote.Constants
 import com.syntax.haering.marvelsyntaxfinalproject.data.remote.MarvelApi
 
+private val TAG = "repository"
 class Repository(private val MarvelApi: MarvelApi) {
-
-    val dataBase = Firebase.firestore
 
     private var _characters =
         MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>>(mutableListOf())
@@ -57,6 +60,15 @@ class Repository(private val MarvelApi: MarvelApi) {
     private var _detailComicsCollection = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>()
     val detailComicsCollection: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importComicData.Result>>
         get() = _detailComicsCollection
+
+
+    private var _libraryCharList = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>?>(mutableListOf())
+    val libraryCharList: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>?>
+        get() = _libraryCharList
+
+    private var _librarySeriesList = MutableLiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>?>(mutableListOf())
+    val librarySeriesList: LiveData<MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>?>
+        get() = _librarySeriesList
 
     suspend fun loadCharacters() {
         val characterImport =  MarvelApi.retrofitService.getAllCharacters(
@@ -109,6 +121,8 @@ class Repository(private val MarvelApi: MarvelApi) {
         _homeSeriesList.value?.addAll(serieImport.data.results.shuffled())
         _homeSeriesList.value = _homeSeriesList.value
     }
+
+
 
     suspend fun loadSingleCharacter(id:Int){
         val singleCharacterImport = MarvelApi.retrofitService.getSingleCharacter(
@@ -187,5 +201,32 @@ class Repository(private val MarvelApi: MarvelApi) {
         )
 
         _detailComicsCollection.value = importComics.data.results.toMutableList()
+    }
+
+    suspend fun loadLibraryCharList(id: Int){
+        val import = MarvelApi.retrofitService.getSingleCharacter(
+            apikey = Constants.API_KEY,
+            ts = Constants.timestamp,
+            hash = Constants.hash(),
+            id = id
+        )
+
+
+        _libraryCharList.value?.add(import.data.results.first())
+        _libraryCharList.value = _libraryCharList.value
+
+        Log.d(TAG, "$id : ${import.data.results.first()}")
+    }
+
+    suspend fun loadLibrarySeriesList(id: Int){
+        val import = MarvelApi.retrofitService.getSingleSerie(
+            apikey = Constants.API_KEY,
+            ts = Constants.timestamp,
+            hash = Constants.hash(),
+            id = id
+        )
+
+        _librarySeriesList.value?.add(import.data.results.first())
+        _librarySeriesList.value = _librarySeriesList.value
     }
 }

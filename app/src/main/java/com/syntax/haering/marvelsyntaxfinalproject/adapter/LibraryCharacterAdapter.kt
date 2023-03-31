@@ -5,10 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.cardview.widget.CardView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import coil.load
 import com.syntax.haering.marvelsyntaxfinalproject.R
+import com.syntax.haering.marvelsyntaxfinalproject.ui.LibraryFragmentDirections
 
 class LibraryCharacterAdapter: RecyclerView.Adapter<LibraryCharacterAdapter.ItemViewHolder>() {
 
@@ -41,6 +43,10 @@ class LibraryCharacterAdapter: RecyclerView.Adapter<LibraryCharacterAdapter.Item
         holder.characterImage.load("$https/portrait_medium.${character.thumbnail.extension}"){
             placeholder(R.drawable.marvelcomics_loading)
             error(R.drawable.error404notfound_image)
+        }
+
+        holder.characterCard.setOnClickListener {
+            Navigation.findNavController(holder.itemView).navigate(LibraryFragmentDirections.actionLibraryFragmentToDetailCharacterFragment(character.id))
         }
     }
 }
