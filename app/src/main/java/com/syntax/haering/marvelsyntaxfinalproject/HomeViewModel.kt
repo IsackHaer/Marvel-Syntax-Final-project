@@ -34,6 +34,12 @@ class HomeViewModel : ViewModel() {
     val libraryCharList = repository.libraryCharList
     val librarySeriesList = repository.librarySeriesList
 
+    private var dbCharDocID = MutableLiveData<String>()
+    private var dbSerieDocID = MutableLiveData<String>()
+    private var isAlreadySaved = MutableLiveData<Boolean>(false)
+    private var dbCharacterList = MutableLiveData<MutableList<FirestoreSaveModel>>(mutableListOf())
+    private var dbSerieList = MutableLiveData<MutableList<FirestoreSaveModel>>(mutableListOf())
+
     val singleCharacter = repository.singleCharacter
     val singleSerie = repository.singleSerie
     val singleComic = repository.singleComic
@@ -178,10 +184,6 @@ class HomeViewModel : ViewModel() {
         }
     }
 
-    private var isAlreadySaved = MutableLiveData<Boolean>(false)
-
-    private var dbCharacterList = MutableLiveData<MutableList<FirestoreSaveModel>>(mutableListOf())
-
     fun loadLibraryCharList() {
         db.collection("user/${currentUser.value?.uid}/characters")
             .orderBy("timestamp")
@@ -194,17 +196,20 @@ class HomeViewModel : ViewModel() {
                     //compares firebase list with api list on the device
                     for (i in dbCharacterList.value!!) {
                         for (character in libraryCharList.value!!) {
-                            if (i.marvelID == character.id.toString()){
+                            if (i.marvelID == character.id.toString()) {
                                 isAlreadySaved.value = true
                                 break
                             } else {
                                 isAlreadySaved.value = false
                             }
                         }
-                        if (!isAlreadySaved.value!!){
+                        if (!isAlreadySaved.value!!) {
                             viewModelScope.launch {
                                 repository.loadLibraryCharList(i.marvelID.toInt())
-                                Log.d(TAG, "fun loadLibraryCharList added missing character :  ${dbCharacterList.value}")
+                                Log.d(
+                                    TAG,
+                                    "fun loadLibraryCharList added missing character :  ${dbCharacterList.value}"
+                                )
                             }
                         }
                     }
@@ -213,10 +218,11 @@ class HomeViewModel : ViewModel() {
                 else {
                     viewModelScope.launch {
                         for (i in dbCharacterList.value!!) {
-                            _apiStatus.value = APIStatus.LOADING
                             repository.loadLibraryCharList(i.marvelID.toInt())
-                            _apiStatus.value = APIStatus.DONE
-                            Log.d(TAG, "fun loadLibraryCharList added All characters :  ${dbCharacterList.value}")
+                            Log.d(
+                                TAG,
+                                "fun loadLibraryCharList added All characters :  ${dbCharacterList.value}"
+                            )
                         }
                     }
                 }
@@ -224,65 +230,75 @@ class HomeViewModel : ViewModel() {
             .addOnFailureListener {
                 Log.d(TAG, "Failed loading characters-collection")
             }
-
     }
 
     fun loadLibrarySeriesList() {
-        var isAlreadySaved = false
         db.collection("user/${currentUser.value?.uid}/series")
             .orderBy("timestamp")
             .get()
             .addOnSuccessListener { result ->
-                val dbSeriesList = result.toObjects(FirestoreSaveModel::class.java)
+                dbSerieList.value = result.toObjects(FirestoreSaveModel::class.java)
 
                 //checks if library Series list is empty or not
                 if (librarySeriesList.value!!.isNotEmpty()) {
-
                     //compares the firebase list and the api list on the device
-                    for (i in dbSeriesList) {
+                    for (i in dbSerieList.value!!) {
                         for (serie in librarySeriesList.value!!) {
                             if (i.marvelID == serie.id.toString()) {
-                                isAlreadySaved = true
+                                isAlreadySaved.value = true
+                                break
+                            } else {
+                                isAlreadySaved.value = false
+                            }
+                        }
+
+                        if (!isAlreadySaved.value!!) {
+                            viewModelScope.launch {
+                                repository.loadLibrarySeriesList(i.marvelID.toInt())
+                                Log.d(TAG, "fun loadLibrarySerieList added missing serie : ${dbSerieList.value}")
                             }
                         }
                     }
 
-                    //downloads the serie if it exists in firebase list but not in api list on the device
-                    if (!isAlreadySaved)
-                        viewModelScope.launch {
-                            for (i in dbSeriesList) {
-                                Log.d(TAG, dbSeriesList.toString())
-                                _apiStatus.value = APIStatus.LOADING
-                                repository.loadLibrarySeriesList(i.marvelID.toInt())
-                                _apiStatus.value = APIStatus.DONE
-                            }
-                        }
-
                 } else {
+                    //if on device librarySerieList == empty
                     viewModelScope.launch {
-                        for (i in dbSeriesList) {
-                            Log.d(TAG, dbSeriesList.toString())
-                            _apiStatus.value = APIStatus.LOADING
+                        for (i in dbSerieList.value!!) {
                             repository.loadLibrarySeriesList(i.marvelID.toInt())
-                            _apiStatus.value = APIStatus.DONE
+                            Log.d(TAG, "fun loadLibrarySeriesList added all series : ${dbSerieList.value}")
                         }
                     }
                 }
             }
             .addOnFailureListener {
-                Log.d(TAG, "Failed loading characters-collection")
+                Log.d(TAG, "Failed loading serie-collection")
             }
     }
 
-    private var dbDocumentID = MutableLiveData<String>()
-    fun getDbDocID(id: String) {
+
+    fun getDbCharDocID(id: String) {
         db.collection("user/${currentUser.value?.uid}/characters")
             .get()
             .addOnSuccessListener { result ->
                 val dbCharacterList = result.toObjects(FirestoreSaveModel::class.java)
                 for (i in dbCharacterList) {
                     if (i.marvelID == id) {
-                        dbDocumentID.value = i.docID
+                        dbCharDocID.value = i.docID
+                        Log.d(TAG, i.docID)
+                        break
+                    }
+                }
+            }
+    }
+
+    fun getDbSerieDocID(id: String) {
+        db.collection("user/${currentUser.value?.uid}/series")
+            .get()
+            .addOnSuccessListener { result ->
+                val dbSerieList = result.toObjects(FirestoreSaveModel::class.java)
+                for (i in dbSerieList) {
+                    if (i.marvelID == id) {
+                        dbSerieDocID.value = i.docID
                         Log.d(TAG, i.docID)
                         break
                     }
@@ -291,21 +307,31 @@ class HomeViewModel : ViewModel() {
     }
 
     fun deleteLibraryChar(id: String) {
-        db.document("user/${currentUser.value?.uid}/characters/${dbDocumentID.value}")
+        db.document("user/${currentUser.value?.uid}/characters/${dbCharDocID.value}")
             .delete()
             .addOnSuccessListener {
-                Log.d(TAG, "${dbDocumentID.value} character was successfully deleted")
+                Log.d(TAG, "${dbCharDocID.value} character was successfully deleted")
+                _isSavedInLibrary.value = false
             }
             .addOnFailureListener {
                 Log.d(TAG, "Failed to delete character : ${it.message}")
             }
 
-        for (i in libraryCharList.value!!) {
-            if (i.id == id.toInt()) {
-                libraryCharList.value?.remove(i)
-                break
+        repository.deleteLibraryCharacter(id.toInt())
+    }
+
+    fun deleteLibrarySerie(id: String) {
+        db.document("user/${currentUser.value?.uid}/series/${dbSerieDocID.value}")
+            .delete()
+            .addOnSuccessListener {
+                Log.d(TAG, "${dbSerieDocID.value} serie was successfully deleted")
+                _isSavedInLibrary.value = false
             }
-        }
+            .addOnFailureListener {
+                Log.d(TAG, "Failed to delete serie : ${it.message}")
+            }
+
+        repository.deleteLibrarySerie(id.toInt())
     }
 
     fun addLibraryChar(id: String, timestamp: Date) {
@@ -321,6 +347,19 @@ class HomeViewModel : ViewModel() {
             }
     }
 
+    fun addLibrarySerie(id: String, timestamp: Date) {
+        val addSerie = FirestoreSaveModel("", id, timestamp)
+        db.collection("user/${currentUser.value?.uid}/series/")
+            .add(addSerie)
+            .addOnSuccessListener {
+                loadLibrarySeriesList()
+                Log.d(TAG, "serie was successfully added")
+            }
+            .addOnFailureListener {
+                Log.d(TAG, "Failed to add serie : ${it.message}")
+            }
+    }
+
     fun isCharInLibrary(
         charID: Int,
         libraryList: MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importCharacterData.Result>
@@ -328,13 +367,27 @@ class HomeViewModel : ViewModel() {
         for (i in libraryList) {
             if (i.id == charID) {
                 _isSavedInLibrary.value = true
-                getDbDocID(charID.toString())
+                getDbCharDocID(charID.toString())
                 break
             } else {
                 _isSavedInLibrary.value = false
             }
         }
-        _isSavedInLibrary.value = _isSavedInLibrary.value
+    }
+
+    fun isSerieInLibrary(
+        serieID: Int,
+        libraryList: MutableList<com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result>
+    ) {
+        for (i in libraryList) {
+            if (i.id == serieID) {
+                _isSavedInLibrary.value = true
+                getDbSerieDocID(serieID.toString())
+                break
+            } else {
+                _isSavedInLibrary.value = false
+            }
+        }
     }
 
 }

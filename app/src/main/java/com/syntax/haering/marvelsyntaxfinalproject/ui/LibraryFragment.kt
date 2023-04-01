@@ -58,6 +58,11 @@ class LibraryFragment : Fragment() {
             if (it != null) {
                 characterAdapter.submitSavedCharacters(it)
             }
+            if (it!!.isEmpty()){
+                binding.libraryCharactersRv.visibility = View.GONE
+            } else {
+                binding.libraryCharactersRv.visibility = View.VISIBLE
+            }
         }
 
         viewModel.librarySeriesList.observe(viewLifecycleOwner){

@@ -95,24 +95,21 @@ class DetailCharacterFragment : Fragment() {
 
 
         viewModel.libraryCharList.observe(viewLifecycleOwner){ list ->
-            if (list != null) {
+            if (!list!!.isNullOrEmpty()) {
                 viewModel.isCharInLibrary(character.id, list)
-
-                viewModel.isSavedInLibrary.observe(viewLifecycleOwner){
-                    when (it) {
-                        true -> {
-                            binding.detailCharFavBtn.setImageResource(R.drawable.baseline_star_24)
-                            binding.detailCharFavBtn.setOnClickListener {
-                                viewModel.deleteLibraryChar(character.id.toString())
-                                viewModel.isCharInLibrary(character.id, list)
-                            }
+            }
+            viewModel.isSavedInLibrary.observe(viewLifecycleOwner){
+                when (it) {
+                    true -> {
+                        binding.detailCharFavBtn.setImageResource(R.drawable.baseline_star_24)
+                        binding.detailCharFavBtn.setOnClickListener {
+                            viewModel.deleteLibraryChar(character.id.toString())
                         }
-                        else -> {
-                            binding.detailCharFavBtn.setImageResource(R.drawable.baseline_star_border_24)
-                            binding.detailCharFavBtn.setOnClickListener {
-                                viewModel.addLibraryChar(character.id.toString(), Date())
-                                viewModel.isCharInLibrary(character.id, list)
-                            }
+                    }
+                    else -> {
+                        binding.detailCharFavBtn.setImageResource(R.drawable.baseline_star_border_24)
+                        binding.detailCharFavBtn.setOnClickListener {
+                            viewModel.addLibraryChar(character.id.toString(), Date())
                         }
                     }
                 }

@@ -14,6 +14,7 @@ import com.syntax.haering.marvelsyntaxfinalproject.R
 import com.syntax.haering.marvelsyntaxfinalproject.adapter.DetailSeriesComicsAdapter
 import com.syntax.haering.marvelsyntaxfinalproject.databinding.FragmentDetailSerieBinding
 import kotlinx.coroutines.launch
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -63,9 +64,6 @@ class DetailSerieFragment : Fragment() {
     fun setUpUI(
         serie: com.syntax.haering.marvelsyntaxfinalproject.data.importSerieData.Result
     ) {
-
-        viewModel.loadLibrarySeriesList()
-
         lifecycleScope.launch {
             val https = serie.thumbnail.path.replace("http", "https")
             viewModel.loadComicCollection(serie.comics.collectionURI)
@@ -83,7 +81,31 @@ class DetailSerieFragment : Fragment() {
         binding.detailSeriesComicCollectionRv.adapter = comicAdapter
 
         binding.detailSerieBackBtn.setOnClickListener {
+            viewModel.detailComicsCollection.value?.clear()
             Navigation.findNavController(binding.root).navigateUp()
+        }
+
+        viewModel.librarySeriesList.observe(viewLifecycleOwner){ list ->
+            if (list != null){
+                viewModel.isSerieInLibrary(serie.id, list)
+
+                viewModel.isSavedInLibrary.observe(viewLifecycleOwner){
+                    when (it) {
+                        true -> {
+                            binding.detailSerieFavBtn.setImageResource(R.drawable.baseline_star_24)
+                            binding.detailSerieFavBtn.setOnClickListener {
+                                viewModel.deleteLibrarySerie(serie.id.toString())
+                            }
+                        }
+                        else -> {
+                            binding.detailSerieFavBtn.setImageResource(R.drawable.baseline_star_border_24)
+                            binding.detailSerieFavBtn.setOnClickListener {
+                                viewModel.addLibrarySerie(serie.id.toString(), Date())
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         viewModel.loadComicStatus.observe(viewLifecycleOwner){

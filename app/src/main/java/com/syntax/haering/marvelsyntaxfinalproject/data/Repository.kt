@@ -228,5 +228,27 @@ class Repository(private val MarvelApi: MarvelApi) {
 
         _librarySeriesList.value?.add(import.data.results.first())
         _librarySeriesList.value = _librarySeriesList.value
+
+        Log.d(TAG, "$id : ${import.data.results.first()}")
+    }
+
+    fun deleteLibraryCharacter(id: Int){
+        for (i in _libraryCharList.value!!){
+            if (id == i.id){
+                _libraryCharList.value?.remove(i)
+                break
+            }
+        }
+        _libraryCharList.value = _libraryCharList.value
+    }
+
+    fun deleteLibrarySerie(id: Int){
+        for (i in _librarySeriesList.value!!){
+            if (id == i.id){
+                _librarySeriesList.value?.remove(i)
+                break
+            }
+        }
+        _librarySeriesList.value = _librarySeriesList.value
     }
 }
