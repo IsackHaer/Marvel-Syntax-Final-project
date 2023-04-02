@@ -62,8 +62,10 @@ class HomeFragment: Fragment() {
         binding.homeThanosCv.setOnClickListener { navigateToCharacter(1009652) }
 
 
-        viewModel.loadLibraryCharList()
-        viewModel.loadLibrarySeriesList()
+        lifecycleScope.launch {
+            viewModel.loadLibraryCharList()
+            viewModel.loadLibrarySeriesList()
+        }
 
         viewModel.currentUser.observe(viewLifecycleOwner){
             if (it == null){

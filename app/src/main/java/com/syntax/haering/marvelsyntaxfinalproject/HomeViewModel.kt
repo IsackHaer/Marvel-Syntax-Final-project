@@ -109,11 +109,15 @@ class HomeViewModel : ViewModel() {
 
     fun loadHomeScreenWithData() {
         viewModelScope.launch {
-            _apiStatus.value = APIStatus.LOADING
-            launch { repository.loadAdvertComicList() }
+            launch {
+                _apiStatus.value = APIStatus.LOADING
+                repository.loadAdvertComicList()
+            }
             launch { repository.loadHomeSeriesList() }
-            launch { repository.loadCharacters() }
-            _apiStatus.value = APIStatus.DONE
+            launch {
+                repository.loadCharacters()
+                _apiStatus.value = APIStatus.DONE
+            }
         }
     }
 
@@ -312,12 +316,11 @@ class HomeViewModel : ViewModel() {
             .addOnSuccessListener {
                 Log.d(TAG, "${dbCharDocID.value} character was successfully deleted")
                 _isSavedInLibrary.value = false
+                repository.deleteLibraryCharacter(id.toInt())
             }
             .addOnFailureListener {
                 Log.d(TAG, "Failed to delete character : ${it.message}")
             }
-
-        repository.deleteLibraryCharacter(id.toInt())
     }
 
     fun deleteLibrarySerie(id: String) {
@@ -326,12 +329,11 @@ class HomeViewModel : ViewModel() {
             .addOnSuccessListener {
                 Log.d(TAG, "${dbSerieDocID.value} serie was successfully deleted")
                 _isSavedInLibrary.value = false
+                repository.deleteLibrarySerie(id.toInt())
             }
             .addOnFailureListener {
                 Log.d(TAG, "Failed to delete serie : ${it.message}")
             }
-
-        repository.deleteLibrarySerie(id.toInt())
     }
 
     fun addLibraryChar(id: String, timestamp: Date) {

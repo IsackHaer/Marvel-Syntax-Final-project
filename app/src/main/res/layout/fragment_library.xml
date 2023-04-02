@@ -14,6 +14,20 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <TextView
+                android:id="@+id/library_CHARACTERS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Characters:"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/library_characters_rv"
                 android:layout_width="0dp"
@@ -22,15 +36,28 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/library_CHARACTERS"
                 tools:listitem="@layout/item_library_charactercards"/>
+
+            <TextView
+                android:id="@+id/library_SERIES"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Series:"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/library_characters_rv" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/library_series_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@+id/library_characters_rv"
+                app:layout_constraintTop_toBottomOf="@+id/library_SERIES"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

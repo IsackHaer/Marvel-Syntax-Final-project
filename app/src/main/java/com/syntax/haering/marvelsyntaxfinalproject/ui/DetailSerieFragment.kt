@@ -81,7 +81,6 @@ class DetailSerieFragment : Fragment() {
         binding.detailSeriesComicCollectionRv.adapter = comicAdapter
 
         binding.detailSerieBackBtn.setOnClickListener {
-            viewModel.detailComicsCollection.value?.clear()
             Navigation.findNavController(binding.root).navigateUp()
         }
 
@@ -123,6 +122,7 @@ class DetailSerieFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.detailComicsCollection.value?.clear()
         _binding = null
     }
 

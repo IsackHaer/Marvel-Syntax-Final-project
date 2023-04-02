@@ -60,14 +60,23 @@ class LibraryFragment : Fragment() {
             }
             if (it!!.isEmpty()){
                 binding.libraryCharactersRv.visibility = View.GONE
+                binding.libraryCHARACTERS.visibility = View.GONE
             } else {
                 binding.libraryCharactersRv.visibility = View.VISIBLE
+                binding.libraryCHARACTERS.visibility = View.VISIBLE
             }
         }
 
         viewModel.librarySeriesList.observe(viewLifecycleOwner){
             if (it != null) {
                 seriesAdapter.submitSavedSeries(it)
+            }
+            if (it!!.isEmpty()){
+                binding.librarySeriesRv.visibility = View.GONE
+                binding.librarySERIES.visibility = View.GONE
+            } else {
+                binding.librarySeriesRv.visibility = View.VISIBLE
+                binding.librarySERIES.visibility = View.VISIBLE
             }
         }
 

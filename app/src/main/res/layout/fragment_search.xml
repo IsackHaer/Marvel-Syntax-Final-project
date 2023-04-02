@@ -87,4 +87,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_character_btn" />
+
+    <TextView
+        android:id="@+id/search_empty_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Search not found"
+        android:textAppearance="@style/martel_sans_marvel"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_character_btn" />
 </androidx.constraintlayout.widget.ConstraintLayout>

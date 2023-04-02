@@ -70,10 +70,12 @@ class SearchFragment : Fragment() {
                 HomeViewModel.APIStatus.LOADING -> {
                     binding.searchProgressBar.visibility = View.VISIBLE
                     binding.searchErrorIv.visibility = View.GONE
+                    binding.searchEmptyTv.visibility = View.GONE
                 }
                 HomeViewModel.APIStatus.ERROR -> {
                     binding.searchProgressBar.visibility = View.GONE
                     binding.searchErrorIv.visibility = View.VISIBLE
+                    binding.searchEmptyTv.visibility = View.GONE
                 }
                 else -> {
                     binding.searchProgressBar.visibility = View.GONE
@@ -89,6 +91,11 @@ class SearchFragment : Fragment() {
                     categoryBtnState(it)
                     binding.searchRv.adapter = searchAdapter
                     viewModel.searchedCharacter.observe(viewLifecycleOwner) { characterList ->
+                        if (characterList.isNullOrEmpty()){
+                            binding.searchEmptyTv.visibility = View.VISIBLE
+                        } else {
+                            binding.searchEmptyTv.visibility = View.GONE
+                        }
                         lifecycleScope.launch { searchAdapter.submitSearchList(characterList) }
                     }
                 }
@@ -96,6 +103,11 @@ class SearchFragment : Fragment() {
                     categoryBtnState(it)
                     binding.searchRv.adapter = searchSerieAdapter
                     viewModel.searchedSerie.observe(viewLifecycleOwner) { serieList ->
+                        if (serieList.isNullOrEmpty()){
+                            binding.searchEmptyTv.visibility = View.VISIBLE
+                        } else {
+                            binding.searchEmptyTv.visibility = View.GONE
+                        }
                         lifecycleScope.launch { searchSerieAdapter.submitSearchList(serieList) }
                     }
                 }
