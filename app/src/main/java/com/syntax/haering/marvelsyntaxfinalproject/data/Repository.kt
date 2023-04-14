@@ -76,7 +76,7 @@ class Repository(private val MarvelApi: MarvelApi) {
             ts = Constants.timestamp,
             hash = Constants.hash(),
             offset = 0,
-            limit = 10
+            limit = 20
         )
 
         _characters.value?.addAll(characterImport.data.results)

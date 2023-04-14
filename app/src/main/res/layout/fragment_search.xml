@@ -89,7 +89,7 @@
         app:layout_constraintTop_toBottomOf="@+id/search_character_btn" />
 
     <TextView
-        android:id="@+id/search_empty_tv"
+        android:id="@+id/search_notFound_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search not found"

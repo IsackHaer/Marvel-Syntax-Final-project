@@ -1,10 +1,13 @@
 package com.syntax.haering.marvelsyntaxfinalproject
 
+import android.os.CountDownTimer
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -112,12 +115,10 @@ class HomeViewModel : ViewModel() {
             launch {
                 _apiStatus.value = APIStatus.LOADING
                 repository.loadAdvertComicList()
-            }
-            launch { repository.loadHomeSeriesList() }
-            launch {
-                repository.loadCharacters()
                 _apiStatus.value = APIStatus.DONE
             }
+            launch { repository.loadHomeSeriesList() }
+            launch { repository.loadCharacters() }
         }
     }
 

@@ -65,17 +65,18 @@ class SearchFragment : Fragment() {
             binding.searchInputEdit.text = null
         }
 
+        //This part decides the visibility of the current state "feedback" for the user
         viewModel.apiStatus.observe(viewLifecycleOwner){
             when(it){
                 HomeViewModel.APIStatus.LOADING -> {
                     binding.searchProgressBar.visibility = View.VISIBLE
                     binding.searchErrorIv.visibility = View.GONE
-                    binding.searchEmptyTv.visibility = View.GONE
+                    binding.searchNotFoundTv.visibility = View.GONE
                 }
                 HomeViewModel.APIStatus.ERROR -> {
                     binding.searchProgressBar.visibility = View.GONE
                     binding.searchErrorIv.visibility = View.VISIBLE
-                    binding.searchEmptyTv.visibility = View.GONE
+                    binding.searchNotFoundTv.visibility = View.GONE
                 }
                 else -> {
                     binding.searchProgressBar.visibility = View.GONE
@@ -92,9 +93,9 @@ class SearchFragment : Fragment() {
                     binding.searchRv.adapter = searchAdapter
                     viewModel.searchedCharacter.observe(viewLifecycleOwner) { characterList ->
                         if (characterList.isNullOrEmpty()){
-                            binding.searchEmptyTv.visibility = View.VISIBLE
+                            binding.searchNotFoundTv.visibility = View.VISIBLE
                         } else {
-                            binding.searchEmptyTv.visibility = View.GONE
+                            binding.searchNotFoundTv.visibility = View.GONE
                         }
                         lifecycleScope.launch { searchAdapter.submitSearchList(characterList) }
                     }
@@ -104,9 +105,9 @@ class SearchFragment : Fragment() {
                     binding.searchRv.adapter = searchSerieAdapter
                     viewModel.searchedSerie.observe(viewLifecycleOwner) { serieList ->
                         if (serieList.isNullOrEmpty()){
-                            binding.searchEmptyTv.visibility = View.VISIBLE
+                            binding.searchNotFoundTv.visibility = View.VISIBLE
                         } else {
-                            binding.searchEmptyTv.visibility = View.GONE
+                            binding.searchNotFoundTv.visibility = View.GONE
                         }
                         lifecycleScope.launch { searchSerieAdapter.submitSearchList(serieList) }
                     }

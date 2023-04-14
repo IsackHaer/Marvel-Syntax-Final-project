@@ -1,6 +1,7 @@
 package com.syntax.haering.marvelsyntaxfinalproject.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -56,6 +57,7 @@ class DetailComicFragment : Fragment() {
             setUpUI(it)
         }
 
+
         return view
     }
 
@@ -76,6 +78,7 @@ class DetailComicFragment : Fragment() {
             }
             binding.detailComicTitleTv.text = comic.title
             binding.detailComicIssueNRTv.text = "Issue: ${ comic.issueNumber }"
+            binding.detailComicDateTv.text = "Date: ${comic.dates.last().date}"
             binding.detailComicDescriptionTv.text = comic.description
             binding.detailComicCreatorsTv.text = creatorsList.toString()
             binding.detailComicIsbnTv.text = "ISBN: ${comic.isbn}"

@@ -151,6 +151,19 @@
                 app:layout_constraintTop_toTopOf="@+id/detailComic_issn_tv"
                 tools:text="price: 15.00$" />
 
+            <TextView
+                android:id="@+id/detailComic_date_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="-90"
+                android:textAppearance="@style/martel_sans_marvel"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@+id/detailComics_cv"
+                app:layout_constraintEnd_toStartOf="@+id/detailComics_cv"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/detailComics_cv"
+                tools:text="23.11.1995" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
